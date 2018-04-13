@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.HrMapper" >
+  <resultMap id="BaseResultMap" type="com.md.manage.domain.Hr" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="CHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime"  />
+    <result column="update_time" property="updateTime"  />
+  </resultMap>
+  <resultMap id="AssociationRoleResultMap" type="com.md.manage.domain.Hr" >
+    <id column="h_id" property="id" jdbcType="INTEGER" />
+    <result column="h_name" property="name" jdbcType="VARCHAR" />
+    <result column="h_phone" property="phone" jdbcType="CHAR" />
+    <result column="h_address" property="address" jdbcType="VARCHAR" />
+    <result column="h_status" property="status" jdbcType="INTEGER" />
+    <result column="h_username" property="username" jdbcType="VARCHAR" />
+    <result column="h_password" property="password" jdbcType="VARCHAR" />
+    <result column="h_remark" property="remark" jdbcType="VARCHAR" />
+    <result column="h_create_time" property="createTime"  />
+    <result column="h_update_time" property="updateTime"  />
+    <collection property="roles" javaType="ArrayList" ofType="com.md.manage.domain.Role">
+      <id column="r_id" property="id" javaType="java.lang.Integer"></id>
+      <result column="r_name" property="name" javaType="java.lang.String"></result>
+      <result column="r_nameZh" property="nameZh" javaType="java.lang.String"></result>
+      <result column="r_status" property="status" javaType="java.lang.Integer"></result>
+      <result column="r_create_time" property="createTime"></result>
+      <result column="r_update_time" property="updateTime"></result>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, phone, address, status, username, password, remark,create_time,update_time
+  </sql>
+  <sql id="Insert_Column_List">
+    name,phone,address,status,username,password,create_time,update_time
+  </sql>
+  <sql id="Association_Role_Column_List">
+    h.id h_id, h.name h_name, h.phone h_phone, h.address h_address,
+    h.status h_status, h.username h_username, h.password h_password,
+    h.remark h_remark ,h.create_time h_create_time, h.update_time h_update_time,
+    r.id r_id , r.name r_name, r.nameZh r_nameZh ,r.create_time r_create_time, r.update_time r_update_time,
+    r.status r_status
+  </sql>
+  <select id="getHrById" resultMap="AssociationRoleResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Association_Role_Column_List" />
+    from `hr` h
+    left join `hr_role` hr on h.id = hr.hrid
+    left join  `role` r on r.id = hr.rid
+    where h.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getHrByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from `hr`
+    where username = #{username}
+  </select>
+
+  <insert id="insert" parameterType="com.md.manage.domain.Hr" useGeneratedKeys="true" keyProperty="id">
+    insert into
+    `hr`
+    (<include refid="Insert_Column_List" />)
+    values
+    (#{name},#{phone},#{address},#{status},#{username},#{password},#{createTime},#{updateTime})
+  </insert>
+
+  <update id="update" parameterType="com.md.manage.domain.Hr">
+    update `hr` set
+    <if test="name!=null">name = #{name},</if>
+    <if test="phone!=null">phone = #{phone},</if>
+    <if test="address!=null">address = #{address},</if>
+    <if test="status!=null">status = #{status},</if>
+    <if test="username!=null">username = #{username},</if>
+    <if test="password!=null">password = #{password},</if>
+    <if test="updateTime!=null">update_time = #{updateTime},</if>
+    <if test="remark!=null">remark = #{remark}</if>
+    where id = #{id}
+  </update>
+
+  <update id="delete">
+    update `hr` set status = 2
+    <if test="updateTime!=null">,update_time= #{updateTime} </if>
+    where id=#{id}
+  </update>
+
+</mapper>
