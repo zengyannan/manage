@@ -1,11 +1,16 @@
 package com.md.manage.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 角色实体类
  */
-public class Role {
+public class Role implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
+
     private Integer id;
 
     private String name;

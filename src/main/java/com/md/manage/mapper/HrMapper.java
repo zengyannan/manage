@@ -21,6 +21,9 @@ public interface HrMapper {
      */
     Hr getHrByUsername(@Param("username") String username);
 
+
+
+
     /**
      * 添加管理员账户
      * @param hr

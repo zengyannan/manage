@@ -55,11 +55,13 @@
     where h.id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="getHrByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="getHrByUsername" resultMap="AssociationRoleResultMap" parameterType="java.lang.String" >
     select
-    <include refid="Base_Column_List" />
-    from `hr`
-    where username = #{username}
+    <include refid="Association_Role_Column_List" />
+    from `hr` h
+    left join `hr_role` hr on h.id = hr.hrid
+    left join  `role` r on r.id = hr.rid
+    where h.username = #{username}
   </select>
 
   <insert id="insert" parameterType="com.md.manage.domain.Hr" useGeneratedKeys="true" keyProperty="id">

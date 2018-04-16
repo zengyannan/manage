@@ -19,6 +19,21 @@ spring:
      testOnReturn: false
      poolPreparedStatements: true
      maxOpenPreparedStatements: 20
+  redis:
+        hostName: 127.0.0.1
+        port: 6379
+        pool:
+              maxActive: 8
+              maxWait: -1
+              maxIdle: 8
+              minIdle: 0
+        timeout: 0
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.md.manage.domain
+logging:
+  level:
+    com:
+      md:
+       manage:
+          mapper: DEBUG

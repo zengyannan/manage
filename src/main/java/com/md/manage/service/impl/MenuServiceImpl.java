@@ -1,6 +1,7 @@
 package com.md.manage.service.impl;
 
 import com.md.manage.domain.Menu;
+import com.md.manage.dto.Page;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.MenuException;
 import com.md.manage.mapper.MenuMapper;
@@ -11,6 +12,8 @@ import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -84,5 +87,15 @@ public class MenuServiceImpl implements MenuService {
             throw new MenuException("操作失败");
         }
         return effect;
+    }
+
+    @Override
+    public List<Menu> getAllMenu() {
+        return menuMapper.getMenuList(null,null);
+    }
+
+    @Override
+    public Page<Menu> getMenuByPage(Page<Menu> page) {
+        return null;
     }
 }

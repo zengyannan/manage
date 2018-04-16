@@ -1,13 +1,12 @@
-package com.md.manage.domain;
+package com.md.manage.dto;
+
+import com.md.manage.domain.Role;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 管理员实体类
- */
-public class Hr implements Serializable{
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +27,17 @@ public class Hr implements Serializable{
 
     private String remark;
 
-    private Date  createTime;
+    private Date createTime;
 
     private Date  updateTime;
 
     private List<Role> roles;
+
+    private String userType;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Integer getId() {
         return id;
@@ -47,7 +52,7 @@ public class Hr implements Serializable{
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPhone() {
@@ -55,7 +60,7 @@ public class Hr implements Serializable{
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -63,32 +68,7 @@ public class Hr implements Serializable{
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.address = address;
     }
 
     public Integer getStatus() {
@@ -97,6 +77,30 @@ public class Hr implements Serializable{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreateTime() {
@@ -123,20 +127,11 @@ public class Hr implements Serializable{
         this.roles = roles;
     }
 
-    @Override
-    public String toString() {
-        return "Hr{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", status=" + status +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", remark='" + remark + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", roles=" + roles +
-                '}';
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

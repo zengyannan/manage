@@ -55,4 +55,8 @@ public class MenuController {
         return new JsonResult().success(menuService.deleteMenu(id));
     }
 
+    @GetMapping("/api/menu/list")
+    public JsonResult getAllMenu(){
+        return new JsonResult().success(menuService.getAllMenu());
+    }
 }

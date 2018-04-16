@@ -55,4 +55,11 @@
   <update id="delete" parameterType="java.lang.Integer">
     update `menu` set status=2 where id = #{id}
   </update>
+
+  <select id="getMenuList" resultMap="BaseResultMap" >
+    select <include refid="Base_Column_List" /> from `menu`
+    <if test="offset!=null and number != null">
+       limit #{offset},#{number}
+    </if>
+  </select>
 </mapper>

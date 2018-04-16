@@ -4,6 +4,7 @@ import com.md.manage.domain.Menu;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface MenuMapper {
 
@@ -18,5 +19,7 @@ public interface MenuMapper {
     Menu getMenuByName(String name);
 
     int setOrderPath(@Param("id")Integer id,@Param("orderPath") String orderPath);
+
+    List<Menu> getMenuList(@Param("offset") Integer offset,@Param("number") Integer number);
 
 }
