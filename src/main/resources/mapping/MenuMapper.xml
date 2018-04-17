@@ -11,8 +11,22 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="order_path" property="orderPath" jdbcType="VARCHAR"></result>
   </resultMap>
+
+  <resultMap id="AssociationRoleResultMap" type="com.md.manage.domain.Menu" >
+    <id column="m.id" property="id" jdbcType="INTEGER" />
+    <result column="m.url" property="url" jdbcType="VARCHAR" />
+    <result column="m.path" property="path" jdbcType="VARCHAR" />
+    <result column="m.component" property="component" jdbcType="VARCHAR" />
+    <result column="m.name" property="name" jdbcType="VARCHAR" />
+    <result column="m.parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="m.status" property="status" jdbcType="INTEGER" />
+    <result column="m.order_path" property="orderPath" jdbcType="VARCHAR"></result>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, url, path, component, name, parent_id, status,order_path
+  </sql>
+  <sql id="Association_Role_Column_List" >
+    m.id, m.url, m.path, m.component, m.name, m.parent_id, m.status,m.order_path
   </sql>
   <sql id="Insert_Column_List" >
     url, path, component, name, parent_id, status
@@ -59,7 +73,21 @@
   <select id="getMenuList" resultMap="BaseResultMap" >
     select <include refid="Base_Column_List" /> from `menu`
     <if test="offset!=null and number != null">
-       limit #{offset},#{number}
+       limit #{offset},#{number} where status !=2
+    </if>
+  </select>
+  <select id="getMenusByRoles" resultMap="BaseResultMap"  parameterType="java.util.List">
+    select <include refid="Association_Role_Column_List" />
+    from `menu` m
+    left join `role_menu` rm on m.id=rm.mid
+    left join `role` r on r.id = rm.rid
+    <if test="ids != null">
+      <where>
+        r.id
+        <foreach  collection="ids" item="id" open="in(" close=")" separator="," >
+          #{id}
+        </foreach>
+      </where>
     </if>
   </select>
 </mapper>

@@ -1,19 +1,27 @@
 package com.md.manage.service.impl;
 
 import com.md.manage.domain.Menu;
+import com.md.manage.domain.Role;
+import com.md.manage.dto.MenuTree;
 import com.md.manage.dto.Page;
+import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.MenuException;
 import com.md.manage.mapper.MenuMapper;
+import com.md.manage.mapper.RoleMapper;
 import com.md.manage.model.MenuModel;
 import com.md.manage.service.MenuService;
+import com.md.manage.service.RedisService;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -21,6 +29,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuMapper menuMapper;
+
+
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public Menu getMenuById(String id) {
@@ -96,6 +108,25 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Page<Menu> getMenuByPage(Page<Menu> page) {
+        return null;
+    }
+
+    @Override
+    public MenuTree getMenuTree(String token) {
+        User user=(User) redisService.get(token);
+        List<Role> roles = user.getRoles();
+        Set<Menu> menus = new HashSet<>();
+        if(roles.size()>0){
+            List<Integer> ids = new ArrayList<>();
+            for (Role role:roles){
+                ids.add(role.getId());
+            }
+            List<Menu> menuss=menuMapper.getMenusByRoles(ids);
+            for (Menu m:menuss){
+                menus.add(m);
+            }
+            System.out.println("menus = [" + menus + "]");
+        }
         return null;
     }
 }

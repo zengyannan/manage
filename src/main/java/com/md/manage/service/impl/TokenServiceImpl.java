@@ -1,5 +1,6 @@
 package com.md.manage.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.md.manage.domain.Hr;
 import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
@@ -50,6 +51,12 @@ public class TokenServiceImpl implements TokenService {
             e.printStackTrace();
         }
         if(token!=null){
+            ObjectMapper objectMapper = new ObjectMapper();
+            try{
+                String userJson = objectMapper.writeValueAsString(user);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             redisService.set("token:"+token,user);
         }
         return token;

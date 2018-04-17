@@ -61,7 +61,7 @@
     from `hr` h
     left join `hr_role` hr on h.id = hr.hrid
     left join  `role` r on r.id = hr.rid
-    where h.username = #{username}
+    where h.username = #{username} and h.status != 2
   </select>
 
   <insert id="insert" parameterType="com.md.manage.domain.Hr" useGeneratedKeys="true" keyProperty="id">

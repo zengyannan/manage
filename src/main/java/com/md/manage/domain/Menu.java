@@ -83,4 +83,39 @@ public class Menu {
     public void setOrderPath(String orderPath) {
         this.orderPath = orderPath;
     }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", path='" + path + '\'' +
+                ", component='" + component + '\'' +
+                ", name='" + name + '\'' +
+                ", parentId=" + parentId +
+                ", status=" + status +
+                ", orderPath='" + orderPath + '\'' +
+                '}';
+    }
+
+    /**
+     * 如果对象类型是User 的话 则返回true 去比较hashCode值
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(this == obj) return true;
+        if(obj instanceof Menu){
+            Menu menu =(Menu)obj;
+//          if(menu.getId() == this.id) return true; // 只比较id
+            // 比较id和username 一致时才返回true 之后再去比较 hashCode
+            if(menu.id == this.id && menu.getName().equals(this.name))
+                return true;
+        }
+        return false;
+    }
+    public int hashCode() {
+//      return id.hashCode(); // 只比较id，id一样就不添加进集合
+        return id.hashCode() * name.hashCode();
+    }
 }

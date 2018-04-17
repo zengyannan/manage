@@ -1,6 +1,8 @@
 package com.md.manage.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.md.manage.domain.Menu;
 import com.md.manage.exception.BaseException;
 import com.md.manage.json.JsonResult;
 import com.md.manage.model.MenuModel;
@@ -8,13 +10,12 @@ import com.md.manage.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MenuController {
@@ -57,6 +58,20 @@ public class MenuController {
 
     @GetMapping("/api/menu/list")
     public JsonResult getAllMenu(){
+
         return new JsonResult().success(menuService.getAllMenu());
     }
+
+    @GetMapping("/api/menu/tree")
+    public JsonResult getMenuTree(@RequestHeader String token)throws Exception{
+        Map json=null;
+        try{
+             json = new ObjectMapper().readValue(token,HashMap.class);
+        }catch (Exception e){
+            throw e;
+        }
+        menuService.getMenuTree("token:"+json.get("token"));
+        return null;
+    }
+
 }

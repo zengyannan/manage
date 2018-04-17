@@ -1,0 +1,54 @@
+package com.md.manage.interceptor;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.md.manage.dto.User;
+import com.md.manage.exception.BaseException;
+import com.md.manage.service.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TokenInterceptor implements HandlerInterceptor{
+
+    @Autowired
+    RedisService redisService;
+
+
+    @Override
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object o) throws Exception {
+        String path = req.getRequestURI();
+        if(path.equals("/api/token/get")){
+            return true;
+        }
+        if(path.contains("/api/")){
+            String token = null;
+            User user=null;
+            if(req.getHeader("token")!=null){
+                ObjectMapper objectMapper = new ObjectMapper();
+                Map json =  objectMapper.readValue(req.getHeader("token"), HashMap.class);
+                token =  "token:"+json.get("token");
+                user =(User)redisService.get(token);
+            }
+            if(user==null){
+                res.setStatus(401);
+                throw new BaseException("token不存在或已过期!");
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+
+    }
+}

@@ -1,6 +1,7 @@
 package com.md.manage.service.impl;
 
 import com.md.manage.service.RedisService;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.data.redis.core.ValueOperations;
@@ -23,4 +24,9 @@ public class RedisServiceImpl implements RedisService {
         ValueOperations<String,Object> vo = redisTemplate.opsForValue();
         return vo.get(key);
     }
+
+//    public void setHash(String key,Object value){
+//        HashOperations<String,Object,Object> vo = redisTemplate.opsForHash();
+//    }
+
 }
