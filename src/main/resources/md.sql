@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-04-17 18:41:27
+Date: 2018-04-18 18:39:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -160,7 +160,7 @@ CREATE TABLE `menu` (
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', '/', '/', 'Root', '系统目录', '0', '1', '0-1');
+INSERT INTO `menu` VALUES ('1', '/', '/', 'Home', '系统目录', '0', '1', '0-1');
 INSERT INTO `menu` VALUES ('2', '/', '/user', 'User', '人员管理', '1', '1', '1-2');
 INSERT INTO `menu` VALUES ('3', '/api/hr/**', '/hr', 'Hr', '管理员管理', '2', '1', '2-3');
 INSERT INTO `menu` VALUES ('4', '/api/doctor/**', '/doctor', 'Doctor', '医生管理', '2', '1', '2-4');
