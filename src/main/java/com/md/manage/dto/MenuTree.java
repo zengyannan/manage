@@ -21,6 +21,7 @@ public class MenuTree {
 
     private boolean leaf;
 
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<MenuTree> children;
 
@@ -70,5 +71,21 @@ public class MenuTree {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public boolean isLeaf() {
+        return leaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        this.leaf = leaf;
+    }
+
+    public List<MenuTree> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<MenuTree> children) {
+        this.children = children;
     }
 }

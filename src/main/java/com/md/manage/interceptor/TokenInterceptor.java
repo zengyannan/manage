@@ -1,5 +1,7 @@
 package com.md.manage.interceptor;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
@@ -29,7 +31,10 @@ public class TokenInterceptor implements HandlerInterceptor{
             String token = null;
             User user=null;
             if(req.getHeader("token")!=null){
+                JsonFactory factory = new JsonFactory();
+                factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
                 ObjectMapper objectMapper = new ObjectMapper();
+                token = req.getHeader("token");
                 Map json =  objectMapper.readValue(req.getHeader("token"), HashMap.class);
                 token =  "token:"+json.get("token");
                 user =(User)redisService.get(token);

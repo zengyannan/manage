@@ -37,3 +37,7 @@ logging:
       md:
        manage:
           mapper: DEBUG
+md:
+  menu:
+    root:
+      id: 0

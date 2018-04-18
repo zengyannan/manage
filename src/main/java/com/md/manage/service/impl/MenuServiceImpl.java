@@ -16,6 +16,7 @@ import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
+
+    //菜单根目录id
+    @Value("${md.menu.root.id}")
+    private String menuRootID;
 
     @Autowired
     private RedisService redisService;
@@ -112,10 +117,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuTree getMenuTree(String token) {
+    public List<MenuTree> getMenuTree(String token) {
         User user=(User) redisService.get(token);
         List<Role> roles = user.getRoles();
         Set<Menu> menus = new HashSet<>();
+        List<MenuTree> trees=null;
         if(roles.size()>0){
             List<Integer> ids = new ArrayList<>();
             for (Role role:roles){
@@ -125,8 +131,33 @@ public class MenuServiceImpl implements MenuService {
             for (Menu m:menuss){
                 menus.add(m);
             }
-            System.out.println("menus = [" + menus + "]");
+            trees = this.getMenuTree(menus,Integer.parseInt(menuRootID));
+            System.out.println(trees);
         }
-        return null;
+        return trees;
     }
+
+
+    private List<MenuTree> getMenuTree(Set<Menu> menus,int menuRootID){
+        List<MenuTree> trees=new ArrayList<>();
+        MenuTree menuTree=null;
+        for (Menu menu:menus){
+            if(menu.getParentId()==menuRootID){
+                menuTree=new MenuTree();
+                BeanUtils.copyProperties(menu,menuTree);
+                List<MenuTree> children = this.getMenuTree(menus,menuTree.getId());
+                if(children==null){
+                    menuTree.setLeaf(true);
+                }
+                menuTree.setChildren(children);
+                trees.add(menuTree);
+            }
+        }
+        if(trees.size()<=0){
+            trees=null;
+        }
+        return trees;
+    }
+
+
 }

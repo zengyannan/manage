@@ -2,7 +2,7 @@ package com.md.manage.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.md.manage.domain.Menu;
+import com.md.manage.dto.MenuTree;
 import com.md.manage.exception.BaseException;
 import com.md.manage.json.JsonResult;
 import com.md.manage.model.MenuModel;
@@ -70,8 +70,8 @@ public class MenuController {
         }catch (Exception e){
             throw e;
         }
-        menuService.getMenuTree("token:"+json.get("token"));
-        return null;
+        List<MenuTree> trees = menuService.getMenuTree("token:"+json.get("token"));
+        return new JsonResult().success(trees);
     }
 
 }
