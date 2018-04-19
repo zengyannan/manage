@@ -41,3 +41,11 @@ md:
   menu:
     root:
       id: 0
+
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    pageSizeZero: true
+    params: count=countSql

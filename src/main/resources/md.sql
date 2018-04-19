@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-04-18 18:39:46
+Date: 2018-04-19 18:17:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -155,12 +155,12 @@ CREATE TABLE `menu` (
   `order_path` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `parentId` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', '/', '/', 'Home', '系统目录', '0', '1', '0-1');
+INSERT INTO `menu` VALUES ('1', '/', '/', 'Home', '主界面', '0', '1', '0-1');
 INSERT INTO `menu` VALUES ('2', '/', '/user', 'User', '人员管理', '1', '1', '1-2');
 INSERT INTO `menu` VALUES ('3', '/api/hr/**', '/hr', 'Hr', '管理员管理', '2', '1', '2-3');
 INSERT INTO `menu` VALUES ('4', '/api/doctor/**', '/doctor', 'Doctor', '医生管理', '2', '1', '2-4');
@@ -171,6 +171,8 @@ INSERT INTO `menu` VALUES ('8', 'api/specific', '/specific', 'Specific', '具体
 INSERT INTO `menu` VALUES ('9', 'api/specific/item', '/specificItem', 'SpecificItem', '病人检验数值', '10', '1', '10-9');
 INSERT INTO `menu` VALUES ('10', '/', '/disease', 'Disease', '病理管理', '1', '1', '1-10');
 INSERT INTO `menu` VALUES ('11', '/api/laboratorySheet', '/laboratorySheet', 'LaboratorySheet', '检验单', '1', '1', '1-11');
+INSERT INTO `menu` VALUES ('12', null, '/main', 'Main', '主页', '1', '1', '1-12');
+INSERT INTO `menu` VALUES ('13', null, '/test', 'Test', '测试页面', '1', '1', '1-13');
 
 -- ----------------------------
 -- Table structure for `organ`
@@ -258,7 +260,7 @@ CREATE TABLE `role_menu` (
   PRIMARY KEY (`id`),
   KEY `mid` (`mid`),
   KEY `rid` (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_menu
@@ -270,6 +272,10 @@ INSERT INTO `role_menu` VALUES ('4', '4', '6');
 INSERT INTO `role_menu` VALUES ('5', '5', '7');
 INSERT INTO `role_menu` VALUES ('6', '10', '7');
 INSERT INTO `role_menu` VALUES ('7', '1', '7');
+INSERT INTO `role_menu` VALUES ('8', '12', '6');
+INSERT INTO `role_menu` VALUES ('9', '12', '7');
+INSERT INTO `role_menu` VALUES ('10', '13', '6');
+INSERT INTO `role_menu` VALUES ('11', '13', '7');
 
 -- ----------------------------
 -- Table structure for `specific`

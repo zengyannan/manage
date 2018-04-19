@@ -111,6 +111,11 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.getMenuList(null,null);
     }
 
+
+    public List<Menu> findAll(){
+        return menuMapper.findAll();
+    }
+
     @Override
     public Page<Menu> getMenuByPage(Page<Menu> page) {
         return null;

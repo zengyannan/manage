@@ -22,5 +22,7 @@ public interface MenuMapper {
 
     List<Menu> getMenuList(@Param("offset") Integer offset,@Param("number") Integer number);
 
+    List<Menu> findAll();
+
     List<Menu> getMenusByRoles(@Param("ids") List<Integer> ids);
 }

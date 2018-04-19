@@ -76,6 +76,11 @@
        limit #{offset},#{number} where status !=2
     </if>
   </select>
+
+
+  <select id="findAll" resultMap="BaseResultMap" >
+    select <include refid="Base_Column_List" /> from `menu`
+  </select>
   <select id="getMenusByRoles" resultMap="BaseResultMap"  parameterType="java.util.List">
     select <include refid="Association_Role_Column_List" />
     from `menu` m

@@ -28,4 +28,6 @@ public interface MenuService {
 
 
     public List<MenuTree> getMenuTree(String token);
+
+    public List<Menu> findAll();
 }

@@ -2,11 +2,16 @@ package com.md.manage.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.md.manage.domain.Menu;
 import com.md.manage.dto.MenuTree;
 import com.md.manage.exception.BaseException;
 import com.md.manage.json.JsonResult;
 import com.md.manage.model.MenuModel;
+import com.md.manage.model.PageModel;
 import com.md.manage.service.MenuService;
+import com.md.manage.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -24,6 +29,8 @@ public class MenuController {
     private MenuService menuService;
 
 
+
+
     @GetMapping("/api/menu/{id}")
     public JsonResult getMenuById(@PathVariable("id") String id){
         return  new JsonResult().success(menuService.getMenuById(id));
@@ -31,23 +38,13 @@ public class MenuController {
 
     @PostMapping("/api/menu/add")
     public JsonResult insertMenu(@Valid MenuModel menuModel, BindingResult result){
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                throw new BaseException("参数错误", 404, 10001);
-            }
-        }
+        CommonUtils.validateParams(result);
         return  new JsonResult().success(menuService.insertMenu(menuModel));
     }
 
     @PostMapping("/api/menu/update")
     public JsonResult updateMenu(@Valid MenuModel menuModel,BindingResult result){
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                throw new BaseException("参数错误", 404, 10001);
-            }
-        }
+        CommonUtils.validateParams(result);
         return new JsonResult().success(menuService.updateMenu(menuModel));
     }
 
@@ -57,9 +54,12 @@ public class MenuController {
     }
 
     @GetMapping("/api/menu/list")
-    public JsonResult getAllMenu(){
-
-        return new JsonResult().success(menuService.getAllMenu());
+    public JsonResult getAllMenu(@Valid PageModel page,BindingResult result){
+        CommonUtils.validateParams(result);
+        PageHelper.startPage(page.getPageNum(),page.getPageSize());
+        List<Menu> menus = menuService.findAll();
+        PageInfo<Menu> pageInfo  = new PageInfo<>(menus);
+        return new JsonResult().success(pageInfo);
     }
 
     @GetMapping("/api/menu/tree")
