@@ -136,21 +136,20 @@ public class MenuServiceImpl implements MenuService {
             for (Menu m:menuss){
                 menus.add(m);
             }
-            trees = this.getMenuTree(menus,Integer.parseInt(menuRootID));
-            System.out.println(trees);
+            trees = this.generatorMenuTree(menus,Integer.parseInt(menuRootID));
         }
         return trees;
     }
 
 
-    private List<MenuTree> getMenuTree(Set<Menu> menus,int menuRootID){
+    private List<MenuTree> generatorMenuTree(Set<Menu> menus,int menuRootID){
         List<MenuTree> trees=new ArrayList<>();
         MenuTree menuTree=null;
         for (Menu menu:menus){
             if(menu.getParentId()==menuRootID){
                 menuTree=new MenuTree();
                 BeanUtils.copyProperties(menu,menuTree);
-                List<MenuTree> children = this.getMenuTree(menus,menuTree.getId());
+                List<MenuTree> children = this.generatorMenuTree(menus,menuTree.getId());
                 if(children==null){
                     menuTree.setLeaf(true);
                 }
