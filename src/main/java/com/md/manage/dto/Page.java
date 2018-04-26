@@ -13,29 +13,29 @@ public class Page <T>{
     //每页数据条数
     private int pageSize=10;
     //数据库记录数
-    private long count;
+    private long total;
     //总页数
     private int totalPage;
 
     private List<T> list;
 
-    public Page(int pageNow, long count) {
+    public Page(int pageNow, long total) {
         this.pageNow = pageNow;
-        this.count = count;
+        this.total = total;
     }
 
-    public Page(int pageNow, int pageSize, long count) {
+    public Page(int pageNow, int pageSize, long total) {
         this.pageNow = pageNow;
         this.pageSize = pageSize;
-        this.count = count;
+        this.total = total;
     }
 
     public void pagination(){
         // 计算总页数
-        if (this.count % this.pageSize == 0)
-            this.totalPage = new Long(this.count/this.pageSize).intValue();
+        if (this.total % this.pageSize == 0)
+            this.totalPage = new Long(this.total/this.pageSize).intValue();
         else
-            this.totalPage = new Long(this.count/this.pageSize).intValue() + 1;
+            this.totalPage = new Long(this.total/this.pageSize).intValue() + 1;
         // 排除错误页号
         if (this.pageNow < 1)
             this.pageNow = 1;
@@ -70,12 +70,12 @@ public class Page <T>{
         this.pageSize = pageSize;
     }
 
-    public long getCount() {
-        return count;
+    public long getTotal() {
+        return total;
     }
 
-    public void setCount(long count) {
-        this.count = count;
+    public void setTotal(long total) {
+        this.total = total;
     }
 
     public int getTotalPage() {
@@ -100,7 +100,7 @@ public class Page <T>{
                 "offset=" + offset +
                 ", pageNow=" + pageNow +
                 ", pageSize=" + pageSize +
-                ", count=" + count +
+                ", total=" + total +
                 ", totalPage=" + totalPage +
                 ", list=" + list +
                 '}';

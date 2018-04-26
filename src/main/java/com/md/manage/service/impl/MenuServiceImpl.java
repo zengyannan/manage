@@ -8,7 +8,6 @@ import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.MenuException;
 import com.md.manage.mapper.MenuMapper;
-import com.md.manage.mapper.RoleMapper;
 import com.md.manage.model.MenuModel;
 import com.md.manage.service.MenuService;
 import com.md.manage.service.RedisService;
@@ -123,20 +122,27 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuTree> getMenuTree(String token) {
-        User user=(User) redisService.get(token);
-        List<Role> roles = user.getRoles();
-        Set<Menu> menus = new HashSet<>();
         List<MenuTree> trees=null;
+        trees = (List<MenuTree>) redisService.get("menus:"+token);
+        if(trees!=null){
+            return trees;
+        }
+        User user=(User) redisService.get("token:"+token);
+        List<Role> roles = user.getRoles();
+        Set<Menu> menusSet = new HashSet<>();
         if(roles.size()>0){
             List<Integer> ids = new ArrayList<>();
             for (Role role:roles){
                 ids.add(role.getId());
             }
-            List<Menu> menuss=menuMapper.getMenusByRoles(ids);
-            for (Menu m:menuss){
-                menus.add(m);
+            List<Menu> menuList=menuMapper.getMenusByRoles(ids);
+            for (Menu m:menuList){
+                menusSet.add(m);
             }
-            trees = this.generatorMenuTree(menus,Integer.parseInt(menuRootID));
+            trees = this.generatorMenuTree(menusSet,Integer.parseInt(menuRootID));
+        }
+        if(trees!=null){
+            redisService.set("menus:"+token,trees);
         }
         return trees;
     }

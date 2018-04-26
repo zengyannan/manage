@@ -64,6 +64,31 @@
     where h.username = #{username} and h.status != 2
   </select>
 
+
+
+  <!--不关联查询使用PageHelper分页-->
+  <select id="findAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from `hr` h
+  </select>
+
+  <!--关联查询 自己实现分页-->
+  <select id="getListByPage" resultMap="AssociationRoleResultMap" parameterType="com.md.manage.dto.Page">
+    select
+    <include refid="Association_Role_Column_List" />
+    from
+    (
+    select <include refid="Base_Column_List" /> from `hr` limit #{page.offset},#{page.pageSize}
+    ) h
+    left join `hr_role` hr on h.id = hr.hrid
+    left join  `role` r on r.id = hr.rid
+  </select>
+
+  <select id="count" resultType="java.lang.Long">
+    select count(0) from `hr`
+  </select>
+
   <insert id="insert" parameterType="com.md.manage.domain.Hr" useGeneratedKeys="true" keyProperty="id">
     insert into
     `hr`
@@ -85,10 +110,17 @@
     where id = #{id}
   </update>
 
+  <!--<update id="delete">-->
+    <!--update `hr` set status = 2-->
+    <!--<if test="updateTime!=null">,update_time= #{updateTime} </if>-->
+    <!--where id=#{id}-->
+  <!--</update>-->
+
   <update id="delete">
-    update `hr` set status = 2
-    <if test="updateTime!=null">,update_time= #{updateTime} </if>
-    where id=#{id}
+    delete from `hr`  where id=#{id}
+  </update>
+  <update id="deleteHrRole">
+    delete from `hr_role`  where hrid=#{id}
   </update>
 
 </mapper>

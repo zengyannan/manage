@@ -2,6 +2,7 @@ package com.md.manage.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色实体类
@@ -23,6 +24,17 @@ public class Role implements Serializable{
     private Date createTime;
 
     private Date  updateTime;
+
+
+    private List<Menu> menus;
+
+    public List<Menu> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus;
+    }
 
     public Date getCreateTime() {
         return createTime;

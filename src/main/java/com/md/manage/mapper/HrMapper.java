@@ -1,9 +1,11 @@
 package com.md.manage.mapper;
 
 import com.md.manage.domain.Hr;
+import com.md.manage.dto.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface HrMapper {
 
@@ -42,10 +44,18 @@ public interface HrMapper {
     /**
      * 删除管理员账户
      * @param id
-     * @param updateTime
      * @return
      */
-    int delete(@Param("id") Integer id, @Param("updateTime")Date updateTime);
+//    int delete(@Param("id") Integer id, @Param("updateTime")Date updateTime);
+     int delete(@Param("id") Integer id);
 
+     int deleteHrRole(@Param("id") Integer id);
+
+     List<Hr> findAll();
+
+
+     long count();
+
+     List<Hr> getListByPage(@Param("page") Page page);
 
 }

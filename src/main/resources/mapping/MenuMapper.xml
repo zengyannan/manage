@@ -81,6 +81,7 @@
   <select id="findAll" resultMap="BaseResultMap" >
     select <include refid="Base_Column_List" /> from `menu`
   </select>
+
   <select id="getMenusByRoles" resultMap="BaseResultMap"  parameterType="java.util.List">
     select <include refid="Association_Role_Column_List" />
     from `menu` m
@@ -89,10 +90,12 @@
     <if test="ids != null">
       <where>
         r.id
-        <foreach  collection="ids" item="id" open="in(" close=")" separator="," >
+        <foreach  collection="ids" item="id" open="in(" close=") and " separator="," >
           #{id}
         </foreach>
+        m.status = 1
       </where>
     </if>
+    order by m.order_path asc
   </select>
 </mapper>

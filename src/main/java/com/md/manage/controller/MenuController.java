@@ -6,7 +6,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.md.manage.domain.Menu;
 import com.md.manage.dto.MenuTree;
-import com.md.manage.exception.BaseException;
 import com.md.manage.json.JsonResult;
 import com.md.manage.model.MenuModel;
 import com.md.manage.model.PageModel;
@@ -14,7 +13,6 @@ import com.md.manage.service.MenuService;
 import com.md.manage.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,7 +52,7 @@ public class MenuController {
     }
 
     @GetMapping("/api/menu/list")
-    public JsonResult getAllMenu(@Valid PageModel page,BindingResult result){
+    public JsonResult getMenuList(@Valid PageModel page,BindingResult result){
         CommonUtils.validateParams(result);
         PageHelper.startPage(page.getPageNum(),page.getPageSize());
         List<Menu> menus = menuService.findAll();
@@ -70,7 +68,7 @@ public class MenuController {
         }catch (Exception e){
             throw e;
         }
-        List<MenuTree> trees = menuService.getMenuTree("token:"+json.get("token"));
+        List<MenuTree> trees = menuService.getMenuTree(json.get("token").toString());
         return new JsonResult().success(trees);
     }
 

@@ -9,8 +9,31 @@
     <result column="create_time" property="createTime" />
     <result column="update_time" property="updateTime"  />
   </resultMap>
+  <resultMap id="AssociationMenuResultMap" type="com.md.manage.domain.Role" >
+    <id column="r_id" property="id" jdbcType="INTEGER" />
+    <result column="r_name" property="name" jdbcType="VARCHAR" />
+    <result column="r_nameZh" property="nameZh" jdbcType="VARCHAR" />
+    <result column="r_status" property="status" jdbcType="INTEGER" />
+    <result column="r_create_time" property="createTime" />
+    <result column="r_update_time" property="updateTime"  />
+    <collection property="menus" javaType="ArrayList" ofType="com.md.manage.domain.Menu">
+      <id column="m_id" property="id" jdbcType="INTEGER" />
+      <result column="m_url" property="url" jdbcType="VARCHAR" />
+      <result column="m_path" property="path" jdbcType="VARCHAR" />
+      <result column="m_component" property="component" jdbcType="VARCHAR" />
+      <result column="m_name" property="name" jdbcType="VARCHAR" />
+      <result column="m_parent_id" property="parentId" jdbcType="INTEGER" />
+      <result column="m_status" property="status" jdbcType="INTEGER" />
+      <result column="m_order_path" property="orderPath" jdbcType="VARCHAR"></result>
+    </collection>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, name, nameZh, status, create_time, update_time
+  </sql>
+  <sql id="Association_Menu_Column_List" >
+    r.id r_id, r.name r_name, r.nameZh r_nameZh, r.status r_status, r.create_time r_create_time, r.update_time r_update_time,
+    m.id m_id, m.url m_url, m.path m_path, m.component m_component, m.name m_name, m.parent_id m_parent_id,
+    m.status m_status,m.order_path m_order_path
   </sql>
   <select id="getRoleById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -38,5 +61,26 @@
     <if test="updateTime!=null">,update_time= #{updateTime} </if>
     where id=#{id}
   </update>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from `role` r
+
+  </select>
+
+  <select id="getListByPage" resultMap="AssociationMenuResultMap"  parameterType="com.md.manage.dto.Page">
+    select
+    <include refid="Association_Menu_Column_List" />
+    from (
+    select <include refid="Base_Column_List" /> from `role` limit #{page.offset},#{page.pageSize}
+    ) r
+    left join  `role_menu` rm on r.id = rm.rid
+    left join  `menu` m  on m.id = rm.mid
+  </select>
+
+  <select id="count" resultType="java.lang.Long">
+    select count(0) from `role`
+  </select>
 
 </mapper>

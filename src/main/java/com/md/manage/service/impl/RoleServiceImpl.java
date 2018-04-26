@@ -1,9 +1,11 @@
 package com.md.manage.service.impl;
 
 import com.md.manage.domain.Role;
+import com.md.manage.dto.Page;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.RoleException;
 import com.md.manage.mapper.RoleMapper;
+import com.md.manage.model.PageModel;
 import com.md.manage.model.RoleModel;
 import com.md.manage.service.RoleService;
 import com.md.manage.util.CommonUtils;
@@ -12,6 +14,8 @@ import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RoleServiceImpl  implements RoleService{
@@ -100,5 +104,24 @@ public class RoleServiceImpl  implements RoleService{
             throw new RoleException("操作错误");
         }
         return effect;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public List<Role> findAll() {
+        return roleMapper.findAll();
+    }
+
+    @Override
+    public Page<Role> getRoleListByPage(PageModel pageModel) {
+        Long count = roleMapper.count();
+        Page<Role> pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+        pageInfo.pagination();
+        List<Role> roles = roleMapper.getListByPage(pageInfo);
+        pageInfo.setList(roles);
+        return pageInfo;
     }
 }

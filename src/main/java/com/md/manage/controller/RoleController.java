@@ -1,12 +1,18 @@
 package com.md.manage.controller;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.md.manage.domain.Menu;
 import com.md.manage.domain.Role;
+import com.md.manage.dto.Page;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.RoleException;
 import com.md.manage.json.JsonResult;
+import com.md.manage.model.PageModel;
 import com.md.manage.model.RoleModel;
 import com.md.manage.service.RoleService;
+import com.md.manage.util.CommonUtils;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
@@ -69,5 +75,22 @@ public class RoleController {
         int effect = roleService.deleteRole(id);
         return new JsonResult().success(effect);
     }
+
+    @GetMapping("/api/role/list")
+    public JsonResult getRoleListByPage(@Valid PageModel pageModel, BindingResult result){
+        CommonUtils.validateParams(result);
+        Page<Role> pageInfo = roleService.getRoleListByPage(pageModel);
+        return new JsonResult().success(pageInfo);
+    }
+
+    @GetMapping("/api/role/all")
+    public JsonResult getRoleList(@Valid PageModel pageModel, BindingResult result){
+        CommonUtils.validateParams(result);
+        PageHelper.startPage(pageModel.getPageNum(),pageModel.getPageSize());
+        List<Role> roles = roleService.findAll();
+        PageInfo<Role> pageInfo  = new PageInfo<>(roles);
+        return new JsonResult().success(pageInfo);
+    }
+
 
 }

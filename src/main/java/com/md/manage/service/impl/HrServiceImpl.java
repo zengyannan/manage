@@ -1,10 +1,12 @@
 package com.md.manage.service.impl;
 
 import com.md.manage.domain.Hr;
+import com.md.manage.dto.Page;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.HrException;
 import com.md.manage.mapper.HrMapper;
 import com.md.manage.model.HrModel;
+import com.md.manage.model.PageModel;
 import com.md.manage.service.HrService;
 import com.md.manage.util.CommonUtils;
 import com.md.manage.validate.IdMustBePositiveInt;
@@ -12,6 +14,8 @@ import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class HrServiceImpl implements HrService {
@@ -35,7 +39,7 @@ public class HrServiceImpl implements HrService {
         }
         Hr hr = hrMapper.getHrById(Integer.parseInt(id));
         if(hr == null){
-            throw new HrException("该菜单不存在",401,20001);
+            throw new HrException("管理员不存在",401,20001);
         }
         return hr;
     }
@@ -105,11 +109,27 @@ public class HrServiceImpl implements HrService {
         if(!r){
             throw new BaseException("Id必须为正整数",404,10001);
         }
-        int effectNum =  hrMapper.delete(Integer.parseInt(id),CommonUtils.getCurrentDate());
+        int effectNum =  hrMapper.delete(Integer.parseInt(id));
         if(effectNum==0){
             throw new HrException("操作失败",401,20002);
         }
+        hrMapper.deleteHrRole(Integer.parseInt(id));
         return effectNum;
     }
 
+    @Override
+    public List<Hr> findAll() {
+        return hrMapper.findAll();
+    }
+
+
+    @Override
+    public Page<Hr> getHrListByPage(PageModel pageModel) {
+        Long count = hrMapper.count();
+        Page<Hr> pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+        pageInfo.pagination();
+        List<Hr> hrs = hrMapper.getListByPage(pageInfo);
+        pageInfo.setList(hrs);
+        return pageInfo;
+    }
 }
