@@ -1,10 +1,10 @@
 package com.md.manage.service.impl;
 
+import com.md.manage.domain.Hr;
 import com.md.manage.domain.Menu;
 import com.md.manage.domain.Role;
 import com.md.manage.dto.MenuTree;
 import com.md.manage.dto.Page;
-import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.MenuException;
 import com.md.manage.mapper.MenuMapper;
@@ -127,8 +127,8 @@ public class MenuServiceImpl implements MenuService {
         if(trees!=null){
             return trees;
         }
-        User user=(User) redisService.get("token:"+token);
-        List<Role> roles = user.getRoles();
+         Hr hr=(Hr)redisService.get("token:"+token);
+        List<Role> roles = hr.getRoles();
         Set<Menu> menusSet = new HashSet<>();
         if(roles.size()>0){
             List<Integer> ids = new ArrayList<>();
