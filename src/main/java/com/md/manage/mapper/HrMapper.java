@@ -54,8 +54,10 @@ public interface HrMapper {
      List<Hr> findAll();
 
 
-     long count();
+     Long count();
 
      List<Hr> getListByPage(@Param("page") Page page);
 
+
+    int setRoles(@Param("uid") int uid,@Param("ids") List<Integer> ids);
 }

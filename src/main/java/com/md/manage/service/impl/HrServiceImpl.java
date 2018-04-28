@@ -9,6 +9,7 @@ import com.md.manage.model.HrModel;
 import com.md.manage.model.PageModel;
 import com.md.manage.service.HrService;
 import com.md.manage.util.CommonUtils;
+import com.md.manage.validate.IDCollection;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
@@ -131,5 +132,33 @@ public class HrServiceImpl implements HrService {
         List<Hr> hrs = hrMapper.getListByPage(pageInfo);
         pageInfo.setList(hrs);
         return pageInfo;
+    }
+
+
+    /**
+     * 分配角色
+     * @param uid
+     * @param strIds
+     * @return
+     */
+    @Override
+    public int setRoles(String uid, String strIds) {
+        Validate validate = new IdMustBePositiveInt(uid);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("id必须为正整数",404,10001);
+        }
+        validate = new IDCollection(strIds);
+        r = validate.goCheck();
+        if(!r){
+            throw new BaseException("ids必须为多个逗号分隔的正整数集",404,10001);
+        }
+        hrMapper.deleteHrRole(Integer.parseInt(uid));
+        List<Integer> ids = CommonUtils.StringToListOfInteger(strIds);
+        int effect = hrMapper.setRoles(Integer.parseInt(uid),ids);
+        if(effect==0){
+            throw new HrException("操作失败",401,20002);
+        }
+        return effect;
     }
 }

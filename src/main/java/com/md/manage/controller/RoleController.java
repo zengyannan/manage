@@ -19,13 +19,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RoleController {
@@ -46,27 +44,25 @@ public class RoleController {
      * @return
      */
     @PostMapping("/api/role/add")
-    public JsonResult insertRole(@Valid RoleModel roleModel, BindingResult result){
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                throw new BaseException("参数错误", 404, 10001);
-            }
-        }
+    public JsonResult insertRole(@RequestBody @Valid RoleModel roleModel, BindingResult result){
+        CommonUtils.validateParams(result);
         int effect = roleService.insetRole(roleModel);
         return new JsonResult().success(effect);
     }
 
     @PostMapping("api/role/update")
-    public JsonResult updateRole(@Valid RoleModel roleModel,BindingResult result){
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            StringBuilder str = new StringBuilder("");
-            for (ObjectError error : list) {
-                throw new BaseException("参数错误", 404, 10001);
-            }
-        }
+    public JsonResult updateRole(@RequestBody @Valid RoleModel roleModel, BindingResult result){
+        CommonUtils.validateParams(result);
         int effect = roleService.updateRole(roleModel);
+        return new JsonResult().success(effect);
+    }
+
+
+    @PostMapping("api/role/menu/set")
+    public JsonResult setRoleMenu(@RequestBody Map<String,Object> json){
+        String rid = json.get("rid").toString();
+        String ids =json.get("ids").toString();
+        int effect = roleService.setRoleMenu(rid,ids);
         return new JsonResult().success(effect);
     }
 

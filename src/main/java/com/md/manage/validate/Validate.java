@@ -27,7 +27,7 @@ public abstract class Validate {
     }
 
     public static boolean isBlank(String id){
-        return id.isEmpty()?true:false;
+        return id==null||id.isEmpty()?true:false;
     }
 
 

@@ -16,6 +16,8 @@ public interface MenuMapper {
 
     int delete(@Param("id")Integer id);
 
+    int deleteMenuRole(@Param("id")Integer id);
+
     Menu getMenuByName(String name);
 
     int setOrderPath(@Param("id")Integer id,@Param("orderPath") String orderPath);
@@ -23,6 +25,8 @@ public interface MenuMapper {
     List<Menu> getMenuList(@Param("offset") Integer offset,@Param("number") Integer number);
 
     List<Menu> findAll();
+
+    List<Menu> findAllWithParent();
 
     List<Menu> getMenusByRoles(@Param("ids") List<Integer> ids);
 }

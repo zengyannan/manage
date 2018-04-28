@@ -1,25 +1,26 @@
-package com.md.manage.domain;
+package com.md.manage.model;
 
-/**
- * 器官科目实体类
- */
-public class Organ {
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 
-    private int id;
+public class OrganModel {
 
+    private String  id;
+
+    @NotBlank
     private String name;
-
+    @NotBlank
     private String zhName;
+    @NotNull
+    private Integer status;
 
-    private int status;
 
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,11 +40,11 @@ public class Organ {
         this.zhName = zhName;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

@@ -9,6 +9,7 @@ import com.md.manage.model.PageModel;
 import com.md.manage.model.RoleModel;
 import com.md.manage.service.RoleService;
 import com.md.manage.util.CommonUtils;
+import com.md.manage.validate.IDCollection;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.BeanUtils;
@@ -88,6 +89,33 @@ public class RoleServiceImpl  implements RoleService{
     }
 
     /**
+     * 设置角色的菜单
+     * @param rid
+     * @param strIds
+     * @return
+     */
+    @Override
+    public int setRoleMenu(String rid, String strIds) {
+        Validate validate = new IdMustBePositiveInt(rid);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("id必须为正整数",404,10001);
+        }
+        validate = new IDCollection(strIds);
+        r = validate.goCheck();
+        if(!r){
+            throw new BaseException("ids必须为多个逗号分隔的正整数集",404,10001);
+        }
+        roleMapper.deleteRoleMenu(Integer.parseInt(rid));
+        List<Integer> ids = CommonUtils.StringToListOfInteger(strIds);
+        int effect = roleMapper.setMenus(Integer.parseInt(rid),ids);
+        if(effect==0){
+            throw new RoleException("操作失败",401,20002);
+        }
+        return effect;
+    }
+
+    /**
      * 删除role
      * @param id
      * @return
@@ -99,7 +127,9 @@ public class RoleServiceImpl  implements RoleService{
         if(!r){
             throw new BaseException("参数错误",404,10001);
         }
-        int effect = roleMapper.delete(Integer.parseInt(id),CommonUtils.getCurrentDate());
+        roleMapper.deleteRoleMenu(Integer.parseInt(id));
+        roleMapper.deleteRoleHr(Integer.parseInt(id));
+        int effect = roleMapper.delete(Integer.parseInt(id));
         if(effect==0){
             throw new RoleException("操作错误");
         }

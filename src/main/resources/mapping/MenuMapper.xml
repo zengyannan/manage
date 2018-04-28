@@ -22,11 +22,37 @@
     <result column="m.status" property="status" jdbcType="INTEGER" />
     <result column="m.order_path" property="orderPath" jdbcType="VARCHAR"></result>
   </resultMap>
+
+  <resultMap id="AssociationParentResultMap" type="com.md.manage.domain.Menu" >
+    <id column="m_id" property="id" jdbcType="INTEGER" />
+    <result column="m_url" property="url" jdbcType="VARCHAR" />
+    <result column="m_path" property="path" jdbcType="VARCHAR" />
+    <result column="m_component" property="component" jdbcType="VARCHAR" />
+    <result column="m_name" property="name" jdbcType="VARCHAR" />
+    <result column="m_parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="m_status" property="status" jdbcType="INTEGER" />
+    <result column="m_order_path" property="orderPath" jdbcType="VARCHAR"></result>
+    <association property="parent" javaType="com.md.manage.domain.Menu" >
+      <id column="p_id" property="id" jdbcType="INTEGER" />
+      <result column="p_url" property="url" jdbcType="VARCHAR" />
+      <result column="p_path" property="path" jdbcType="VARCHAR" />
+      <result column="p_component" property="component" jdbcType="VARCHAR" />
+      <result column="p_name" property="name" jdbcType="VARCHAR" />
+      <result column="p_parent_id" property="parentId" jdbcType="INTEGER" />
+      <result column="p_status" property="status" jdbcType="INTEGER" />
+    </association>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, url, path, component, name, parent_id, status,order_path
   </sql>
   <sql id="Association_Role_Column_List" >
     m.id, m.url, m.path, m.component, m.name, m.parent_id, m.status,m.order_path
+  </sql>
+  <sql id="Association_Parent_Column_List" >
+    m.id m_id, m.url m_url, m.path m_path, m.component m_component,
+    m.name m_name, m.parent_id m_parent_id, m.status m_status,m.order_path m_order_path,
+    p.id p_id, p.url p_url, p.path p_path, p.component p_component,
+    p.name p_name, p.parent_id p_parent_id, p.status p_status,p.order_path p_order_path
   </sql>
   <sql id="Insert_Column_List" >
     url, path, component, name, parent_id, status
@@ -66,20 +92,30 @@
     where id = #{id}
   </update>
 
-  <update id="delete" parameterType="java.lang.Integer">
-    update `menu` set status=2 where id = #{id}
-  </update>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from  `menu`  where id = #{id}
+  </delete>
+
+  <delete id="deleteMenuRole" parameterType="java.lang.Integer">
+    delete from  `role_menu`  where mid = #{id}
+  </delete>
 
   <select id="getMenuList" resultMap="BaseResultMap" >
     select <include refid="Base_Column_List" /> from `menu`
     <if test="offset!=null and number != null">
-       limit #{offset},#{number} where status !=2
+       limit #{offset},#{number}
     </if>
+    where status !=2
   </select>
 
 
   <select id="findAll" resultMap="BaseResultMap" >
     select <include refid="Base_Column_List" /> from `menu`
+  </select>
+
+  <select id="findAllWithParent" resultMap="AssociationParentResultMap" >
+    select <include refid="Association_Parent_Column_List" /> from `menu` m
+    left join `menu` p on m.parent_id = p.id
   </select>
 
   <select id="getMenusByRoles" resultMap="BaseResultMap"  parameterType="java.util.List">

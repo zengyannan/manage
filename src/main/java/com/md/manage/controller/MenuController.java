@@ -35,13 +35,13 @@ public class MenuController {
     }
 
     @PostMapping("/api/menu/add")
-    public JsonResult insertMenu(@Valid MenuModel menuModel, BindingResult result){
+    public JsonResult insertMenu(@RequestBody @Valid MenuModel menuModel, BindingResult result){
         CommonUtils.validateParams(result);
         return  new JsonResult().success(menuService.insertMenu(menuModel));
     }
 
     @PostMapping("/api/menu/update")
-    public JsonResult updateMenu(@Valid MenuModel menuModel,BindingResult result){
+    public JsonResult updateMenu(@RequestBody @Valid MenuModel menuModel,BindingResult result){
         CommonUtils.validateParams(result);
         return new JsonResult().success(menuService.updateMenu(menuModel));
     }
@@ -55,9 +55,15 @@ public class MenuController {
     public JsonResult getMenuList(@Valid PageModel page,BindingResult result){
         CommonUtils.validateParams(result);
         PageHelper.startPage(page.getPageNum(),page.getPageSize());
-        List<Menu> menus = menuService.findAll();
+        List<Menu> menus = menuService.findAllWithParent();
         PageInfo<Menu> pageInfo  = new PageInfo<>(menus);
         return new JsonResult().success(pageInfo);
+    }
+
+    @GetMapping("/api/menu/all")
+    public JsonResult getAllMenu(){
+        List<Menu> menus = menuService.findAll();
+        return new JsonResult().success(menus);
     }
 
     @GetMapping("/api/menu/tree")
@@ -69,6 +75,12 @@ public class MenuController {
             throw e;
         }
         List<MenuTree> trees = menuService.getMenuTree(json.get("token").toString());
+        return new JsonResult().success(trees);
+    }
+
+    @GetMapping("/api/menu/allTree")
+    public JsonResult getALlMenuTree(){
+        List<MenuTree> trees = menuService.getAllMenuTree();
         return new JsonResult().success(trees);
     }
 

@@ -60,6 +60,11 @@ public class MenuServiceImpl implements MenuService {
             throw new MenuException("菜单名重复了");
         }
         Menu menu = new Menu();
+        Validate validate = new IdMustBePositiveInt(menuModel.getParentId());
+        if(!validate.goCheck()){
+            throw new BaseException("父组件id必须为正整数");
+        }
+        menu.setParentId(Integer.parseInt(menuModel.getParentId()));
         BeanUtils.copyProperties(menuModel,menu);
         int effect =  menuMapper.insert(menu);
         if(effect==0) {
@@ -82,9 +87,17 @@ public class MenuServiceImpl implements MenuService {
         if(!validate.goCheck()){
             throw new BaseException("Id必须为正整数");
         }
+        if(menuModel.getParentId()==null){
+            throw new BaseException("必须传入父组件id");
+        }
+        validate = new IdMustBePositiveInt(menuModel.getParentId());
+        if(!validate.goCheck()){
+            throw new BaseException("父组件id必须为正整数");
+        }
         Menu menu =new Menu();
         BeanUtils.copyProperties(menuModel,menu);
         menu.setId(Integer.parseInt(menuModel.getId()));
+        menu.setParentId(Integer.parseInt(menuModel.getParentId()));
         menu.setOrderPath(menuModel.getParentId()+"-"+menuModel.getId());
         int effect = menuMapper.update(menu);
         if(effect==0){
@@ -99,6 +112,7 @@ public class MenuServiceImpl implements MenuService {
             throw new BaseException("参数错误");
         }
         int effect = menuMapper.delete(Integer.parseInt(id));
+        menuMapper.deleteMenuRole(Integer.parseInt(id));
         if(effect==0){
             throw new MenuException("操作失败");
         }
@@ -110,10 +124,25 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.getMenuList(null,null);
     }
 
+    public List<MenuTree> getAllMenuTree(){
+        List<MenuTree> trees=null;
+        Set<Menu> menusSet = new HashSet<>();
+        List<Menu> menuList=menuMapper.getMenuList(null,null);
+        for (Menu m:menuList){
+            menusSet.add(m);
+        }
+        trees = this.generatorMenuTree(menusSet,Integer.parseInt(menuRootID));
+        return trees;
+    }
 
     public List<Menu> findAll(){
         return menuMapper.findAll();
     }
+
+    public List<Menu> findAllWithParent(){
+        return menuMapper.findAllWithParent();
+    }
+
 
     @Override
     public Page<Menu> getMenuByPage(Page<Menu> page) {
@@ -127,7 +156,7 @@ public class MenuServiceImpl implements MenuService {
         if(trees!=null){
             return trees;
         }
-         Hr hr=(Hr)redisService.get("token:"+token);
+        Hr hr=(Hr)redisService.get("token:"+token);
         List<Role> roles = hr.getRoles();
         Set<Menu> menusSet = new HashSet<>();
         if(roles.size()>0){

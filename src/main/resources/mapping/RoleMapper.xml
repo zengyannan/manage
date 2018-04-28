@@ -56,17 +56,26 @@
     where id= #{id}
   </update>
 
-  <update id="delete">
-    update `role` set status = 2
-    <if test="updateTime!=null">,update_time= #{updateTime} </if>
-    where id=#{id}
-  </update>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from `role` where id=#{id}
+  </delete>
+
+  <delete id="deleteRoleMenu" parameterType="java.lang.Integer">
+    delete from `role_menu`  where rid=#{id}
+  </delete>
+
+  <delete id="deleteRoleHr" parameterType="java.lang.Integer">
+    delete from `hr_role`  where rid=#{id}
+  </delete>
+
 
   <select id="findAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"></include>
-    from `role` r
-
+    from `role`
+    <where>
+      status=1
+    </where>
   </select>
 
   <select id="getListByPage" resultMap="AssociationMenuResultMap"  parameterType="com.md.manage.dto.Page">
@@ -82,5 +91,13 @@
   <select id="count" resultType="java.lang.Long">
     select count(0) from `role`
   </select>
+
+
+  <insert id="setMenus" useGeneratedKeys="true">
+    insert into `role_menu` (rid,mid) values
+    <foreach  collection="ids" item="id" open=" " close=" " separator="," >
+      (#{rid},#{id})
+    </foreach>
+  </insert>
 
 </mapper>

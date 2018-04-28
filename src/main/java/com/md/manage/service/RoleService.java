@@ -17,6 +17,8 @@ public interface RoleService {
 
     public int updateRole(RoleModel roleModel);
 
+    public int setRoleMenu(String  rid,String ids);
+
     public int deleteRole(String id);
 
 

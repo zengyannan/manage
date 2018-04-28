@@ -1,5 +1,7 @@
 package com.md.manage.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * 左侧菜单实体类
  */
@@ -19,6 +21,10 @@ public class Menu {
     private int status;
 
     private String orderPath;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Menu parent;
+
 
 
 
@@ -84,6 +90,14 @@ public class Menu {
 
     public void setOrderPath(String orderPath) {
         this.orderPath = orderPath;
+    }
+
+    public Menu getParent() {
+        return parent;
+    }
+
+    public void setParent(Menu parent) {
+        this.parent = parent;
     }
 
     @Override

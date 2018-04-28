@@ -15,7 +15,11 @@ public interface RoleMapper {
 
     int update(Role role);
 
-    int delete(@Param("id") Integer id, @Param("updateTime")Date updateTime);
+    int delete(@Param("id") Integer id);
+
+    int deleteRoleMenu(@Param("id") Integer id);
+
+    int deleteRoleHr(@Param("id") Integer id);
 
     List<Role> findAll();
 
@@ -23,4 +27,5 @@ public interface RoleMapper {
 
     long count();
 
+    int setMenus(@Param("rid") int rid,@Param("ids") List<Integer> ids);
 }

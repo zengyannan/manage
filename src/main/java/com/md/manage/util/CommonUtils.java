@@ -10,6 +10,7 @@ import sun.misc.BASE64Encoder;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,5 +61,14 @@ public class CommonUtils {
                 throw new BaseException("参数错误", 404, 10001);
             }
         }
+    }
+
+    public static  List<Integer> StringToListOfInteger(String ids){
+        String[] strIds = ids.split(",");
+        List<Integer> list = new ArrayList<>();
+        for (String id:strIds){
+            list.add(Integer.parseInt(id));
+        }
+        return list;
     }
 }

@@ -28,4 +28,6 @@ public interface HrService {
 
 
     Page<Hr> getHrListByPage(PageModel page);
+
+    int setRoles(String uid, String ids);
 }

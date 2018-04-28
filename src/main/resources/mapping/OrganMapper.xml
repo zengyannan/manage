@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.OrganMapper" >
+    <resultMap id="BaseResultMap" type="com.md.manage.domain.Organ" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="zh_name" property="zhName" jdbcType="VARCHAR" />
+        <result column="status"  property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        o.id, o.name, o.zh_name, o.status
+    </sql>
+
+
+    <insert id="insert" parameterType="com.md.manage.domain.Organ" useGeneratedKeys="true" keyProperty="id">
+        insert into `organ`
+        (name,zh_name,status)
+        values
+        (#{name},#{zhName},#{status})
+    </insert>
+
+    <update id="update" parameterType="com.md.manage.domain.Organ">
+        update `organ` set
+        <if test="name!=null"> name=#{name}</if>
+        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
+        <if test="status!=null"> ,status=#{status}</if>
+        where id= #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `organ` where id=#{id}
+    </delete>
+
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `organ` o
+    </select>
+
+
+</mapper>

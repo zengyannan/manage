@@ -30,4 +30,8 @@ public interface MenuService {
     public List<MenuTree> getMenuTree(String token);
 
     public List<Menu> findAll();
+
+    public List<Menu> findAllWithParent();
+
+    public List<MenuTree> getAllMenuTree();
 }

@@ -9,7 +9,7 @@ public class Page <T>{
     //表记录查询起始位置
     private int offset;
     //当前页数
-    private int pageNow;
+    private int pageNum;
     //每页数据条数
     private int pageSize=10;
     //数据库记录数
@@ -19,13 +19,13 @@ public class Page <T>{
 
     private List<T> list;
 
-    public Page(int pageNow, long total) {
-        this.pageNow = pageNow;
+    public Page(int pageNum, long total) {
+        this.pageNum = pageNum;
         this.total = total;
     }
 
-    public Page(int pageNow, int pageSize, long total) {
-        this.pageNow = pageNow;
+    public Page(int pageNum, int pageSize, long total) {
+        this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.total = total;
     }
@@ -37,12 +37,12 @@ public class Page <T>{
         else
             this.totalPage = new Long(this.total/this.pageSize).intValue() + 1;
         // 排除错误页号
-        if (this.pageNow < 1)
-            this.pageNow = 1;
-        if (this.pageNow > this.totalPage)
-            this.pageNow = this.totalPage;
+        if (this.pageNum < 1)
+            this.pageNum = 1;
+        if (this.pageNum > this.totalPage)
+            this.pageNum = this.totalPage;
         // 计算起始行号
-        this.offset = (this.pageNow - 1) * this.pageSize;
+        this.offset = (this.pageNum - 1) * this.pageSize;
 
     }
 
@@ -54,12 +54,12 @@ public class Page <T>{
         this.offset = offset;
     }
 
-    public int getPageNow() {
-        return pageNow;
+    public int getPageNum() {
+        return pageNum;
     }
 
-    public void setPageNow(int pageNow) {
-        this.pageNow = pageNow;
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
 
     public int getPageSize() {
@@ -98,7 +98,7 @@ public class Page <T>{
     public String toString() {
         return "Page{" +
                 "offset=" + offset +
-                ", pageNow=" + pageNow +
+                ", pageNum=" + pageNum +
                 ", pageSize=" + pageSize +
                 ", total=" + total +
                 ", totalPage=" + totalPage +

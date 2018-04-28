@@ -9,7 +9,6 @@ public class MenuModel {
 
     private String id;
 
-    @NotBlank
     private String url;
 
     @NotBlank
@@ -22,7 +21,7 @@ public class MenuModel {
     private String name;
 
     @NotNull
-    private Integer parentId;
+    private String parentId;
 
     @NotNull
     private int status;
@@ -68,11 +67,12 @@ public class MenuModel {
         this.name = name;
     }
 
-    public Integer getParentId() {
+
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

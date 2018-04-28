@@ -116,11 +116,16 @@
     <!--where id=#{id}-->
   <!--</update>-->
 
-  <update id="delete">
+  <delete id="delete">
     delete from `hr`  where id=#{id}
-  </update>
-  <update id="deleteHrRole">
+  </delete>
+  <delete id="deleteHrRole">
     delete from `hr_role`  where hrid=#{id}
-  </update>
-
+  </delete>
+  <insert id="setRoles" useGeneratedKeys="true">
+    insert into `hr_role` (hrid,rid) values
+    <foreach  collection="ids" item="id" open=" " close=" " separator="," >
+      (#{uid},#{id})
+    </foreach>
+  </insert>
 </mapper>
