@@ -4,7 +4,7 @@ public class HrException extends BaseException {
 
     protected Integer code=401;
 
-    protected Integer errorCode=10001;
+    protected Integer errorCode=20001;
 
 
 

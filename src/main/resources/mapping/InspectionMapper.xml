@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.InspectionMapper" >
+    <resultMap id="BaseResultMap" type="com.md.manage.domain.Inspection" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="zh_name" property="zhName" jdbcType="VARCHAR" />
+        <result column="organ_id" property="organId" jdbcType="INTEGER" />
+        <result column="check_address" property="checkAddress" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="WithOrganResultMap" type="com.md.manage.domain.Inspection" >
+        <id column="i_id" property="id" jdbcType="INTEGER" />
+        <result column="i_name" property="name" jdbcType="VARCHAR" />
+        <result column="i_zh_name" property="zhName" jdbcType="VARCHAR" />
+        <result column="i_organ_id" property="organId" jdbcType="INTEGER" />
+        <result column="i_check_address" property="checkAddress" jdbcType="INTEGER" />
+        <association property="organ" javaType="com.md.manage.domain.Organ">
+            <id column="o_id" property="id" jdbcType="INTEGER" />
+            <result column="o_name" property="name" jdbcType="VARCHAR" />
+            <result column="o_zh_name" property="zhName" jdbcType="VARCHAR" />
+            <result column="o_status"  property="status" jdbcType="INTEGER" />
+        </association>
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        i.id, i.name, i.zh_name, i.organ_id,i.check_address
+    </sql>
+
+    <sql id="With_Organ_Column_List" >
+        i.id i_id, i.name i_name, i.zh_name i_zh_name, i.organ_id i_organ_id,
+        i.check_address i_check_address,
+        o.id o_id, o.name o_name, o.zh_name o_zh_name, o.status o_status
+    </sql>
+
+
+    <insert id="insert" parameterType="com.md.manage.domain.Inspection" useGeneratedKeys="true" keyProperty="id">
+        insert into `inspection`
+        (name,zh_name,organ_id,check_address)
+        values
+        (#{name},#{zhName},#{organId},#{checkAddress})
+    </insert>
+
+    <update id="update" parameterType="com.md.manage.domain.Organ">
+        update `inspection` set
+        <if test="name!=null"> name=#{name}</if>
+        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
+        <if test="organId!=null"> ,organ_id=#{organId}</if>
+        <if test="checkAddress!=null"> ,check_address=#{checkAddress}</if>
+        where id= #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `inspection` where id=#{id}
+    </delete>
+
+
+    <select id="findAll" resultMap="WithOrganResultMap">
+        select <include refid="With_Organ_Column_List" /> from `inspection` i
+        left join `organ` o on i.organ_id = o.id
+    </select>
+
+</mapper>

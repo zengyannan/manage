@@ -27,6 +27,10 @@ public class OrganServiceImpl implements OrganService {
         return organMapper.findAll();
     }
 
+    @Override
+    public List<Organ> getAllOrgan() {
+        return organMapper.getAllOrgan();
+    }
 
     @Override
     public int insertOrgan(OrganModel organModel) {
@@ -34,7 +38,7 @@ public class OrganServiceImpl implements OrganService {
         BeanUtils.copyProperties(organModel,organ);
         int effectNum = organMapper.insert(organ);
         if(effectNum==0){
-            throw new RoleException("操作失败");
+            throw new OrganException("操作失败");
         }
         return effectNum;
     }
@@ -55,7 +59,7 @@ public class OrganServiceImpl implements OrganService {
         organ.setId(Integer.parseInt(organModel.getId()));
         int effect = organMapper.update(organ);
         if(effect==0){
-            throw new RoleException("操作失败");
+            throw new OrganException("操作失败");
         }
         return effect;
     }

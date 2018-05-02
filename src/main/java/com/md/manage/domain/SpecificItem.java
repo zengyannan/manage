@@ -4,15 +4,17 @@ public class SpecificItem {
 
     private Integer id;
 
-    private Double result;
+    private String result;
 
     private Integer specificId;
 
-    private String tips;
+    private Integer tips;
 
     private Integer lsId;
 
     private String checker;
+
+    private Specific specific;
 
     public Integer getId() {
         return id;
@@ -22,11 +24,12 @@ public class SpecificItem {
         this.id = id;
     }
 
-    public Double getResult() {
+
+    public String getResult() {
         return result;
     }
 
-    public void setResult(Double result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
@@ -38,11 +41,11 @@ public class SpecificItem {
         this.specificId = specificId;
     }
 
-    public String getTips() {
+    public Integer getTips() {
         return tips;
     }
 
-    public void setTips(String tips) {
+    public void setTips(Integer tips) {
         this.tips = tips;
     }
 
@@ -60,5 +63,13 @@ public class SpecificItem {
 
     public void setChecker(String checker) {
         this.checker = checker;
+    }
+
+    public Specific getSpecific() {
+        return specific;
+    }
+
+    public void setSpecific(Specific specific) {
+        this.specific = specific;
     }
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.SpecificMapper" >
+
+    <resultMap id="BaseResultMap" type="com.md.manage.domain.Specific" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="zh_name" property="zhName" jdbcType="VARCHAR" />
+        <result column="inspection_id" property="inspectionId" jdbcType="INTEGER" />
+        <result column="unit" property="unit" jdbcType="VARCHAR" />
+        <result column="ref" property="ref" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="WithInspectionResultMap" type="com.md.manage.domain.Specific" >
+        <id column="s_id" property="id" jdbcType="INTEGER" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_zh_name" property="zhName" jdbcType="VARCHAR" />
+        <result column="s_inspection_id" property="inspectionId" jdbcType="INTEGER" />
+        <result column="s_unit" property="unit" jdbcType="VARCHAR" />
+        <result column="s_ref" property="ref" jdbcType="VARCHAR" />
+        <association property="inspection" javaType="com.md.manage.domain.Inspection">
+            <id column="i_id" property="id" jdbcType="INTEGER" />
+            <result column="i_name" property="name" jdbcType="VARCHAR" />
+            <result column="i_zh_name" property="zhName" jdbcType="VARCHAR" />
+            <result column="i_organ_id" property="organId" jdbcType="INTEGER" />
+            <result column="i_check_address" property="checkAddress" jdbcType="INTEGER" />
+        </association>
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        s.id, s.name, s.zh_name, s.inspection_id, s.unit, s.ref
+    </sql>
+    <sql id="With_Inspection_Column_List" >
+        s.id s_id, s.name s_name, s.zh_name s_zh_name, s.inspection_id s_inspection_id,
+        s.unit s_unit, s.ref s_ref,
+        i.id i_id, i.name i_name, i.zh_name i_zh_name, i.organ_id i_organ_id,
+        i.check_address i_check_address
+    </sql>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `specific` s
+        <where>
+            id =#{id}
+        </where>
+    </select>
+
+
+    <insert id="insert" parameterType="com.md.manage.domain.Specific" useGeneratedKeys="true" keyProperty="id">
+        insert into `specific`
+        (name,zh_name,inspection_id,unit,ref)
+        values
+        (#{name},#{zhName},#{inspectionId},#{unit},#{ref})
+    </insert>
+
+    <update id="update" parameterType="com.md.manage.domain.Specific">
+        update `specific` set
+        <if test="name!=null"> name=#{name}</if>
+        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
+        <if test="inspectionId!=null"> ,inspection_id=#{inspectionId}</if>
+        <if test="unit!=null"> ,unit=#{unit}</if>
+        <if test="ref!=null"> ,ref=#{ref}</if>
+        where id= #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `specific` where id=#{id}
+    </delete>
+
+
+    <select id="findAll" resultMap="WithInspectionResultMap">
+        select <include refid="With_Inspection_Column_List" /> from `specific` s
+        left join `inspection` i on s.inspection_id = i.id
+    </select>
+
+
+</mapper>

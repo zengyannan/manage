@@ -9,7 +9,7 @@ public abstract class Validate {
 
 
 
-    public abstract   boolean goCheck();
+    public  abstract   boolean goCheck();
 
     protected   boolean isPositiveInt(String id) throws BaseException {
         if(isBlank(id))

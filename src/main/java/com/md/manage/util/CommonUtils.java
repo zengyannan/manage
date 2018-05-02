@@ -71,4 +71,34 @@ public class CommonUtils {
         }
         return list;
     }
+
+    /**
+     * 计算检验指标结果
+     * @param result
+     * @param ref
+     * @return
+     */
+    public static Integer computeTips(String result,String ref){
+        String[] refs = ref.split("~");
+        if(refs.length==2){
+            Double min;
+            Double max;
+            Double r;
+            try{
+                min = Double.parseDouble(refs[0]);
+                max = Double.parseDouble(refs[1]);
+                r = Double.parseDouble(result);
+            }catch (NumberFormatException ex){
+                throw new BaseException("结果值或浮动参考值错误!");
+            }
+            if(r<min)
+                return 4;
+            else if(r>max)
+                return 3;
+            else
+                return 2;
+        }else{
+            return 5;
+        }
+    }
 }

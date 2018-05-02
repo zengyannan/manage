@@ -8,15 +8,13 @@ import com.md.manage.json.JsonResult;
 import com.md.manage.model.OrganModel;
 import com.md.manage.model.PageModel;
 import com.md.manage.service.OrganService;
-
-import java.util.List;
-
 import com.md.manage.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class OrganController {
@@ -34,6 +32,13 @@ public class OrganController {
         PageInfo<Organ> pageInfo  = new PageInfo<>(organList);
         return new JsonResult().success(pageInfo);
     }
+
+    @GetMapping("/api/organ/all")
+    public JsonResult getAllOrgan(){
+        List<Organ> organList = organService.getAllOrgan();
+        return new JsonResult().success(organList);
+    }
+
 
     @PostMapping("/api/organ/add")
     public JsonResult insertOrgan(@RequestBody @Valid OrganModel organModel, BindingResult result){

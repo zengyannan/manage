@@ -38,5 +38,9 @@
         select <include refid="Base_Column_List" /> from `organ` o
     </select>
 
+    <select id="getAllOrgan" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `organ` o where status=1
+    </select>
+
 
 </mapper>

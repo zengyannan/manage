@@ -10,6 +10,8 @@ public interface OrganService {
 
     List<Organ> getOrganList();
 
+    List<Organ> getAllOrgan();
+
     int insertOrgan(OrganModel organModel);
 
     int updateOrgan(OrganModel organModel);

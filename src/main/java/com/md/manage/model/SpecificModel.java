@@ -1,29 +1,32 @@
-package com.md.manage.domain;
+package com.md.manage.model;
 
-public class Specific {
+import org.hibernate.validator.constraints.NotBlank;
 
-    private Integer id;
+import javax.validation.constraints.NotNull;
+
+public class SpecificModel {
+
+    private String id;
 
     private String name;
 
+    @NotBlank
     private String zhName;
 
-    private Integer inspectionId;
+    @NotBlank
+    private String inspectionId;
+
 
     private String unit;
 
+    @NotBlank
     private String ref;
 
-    private Inspection inspection;
-
-    public Specific() {
-    }
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -43,11 +46,11 @@ public class Specific {
         this.zhName = zhName;
     }
 
-    public Integer getInspectionId() {
+    public String getInspectionId() {
         return inspectionId;
     }
 
-    public void setInspectionId(Integer inspectionId) {
+    public void setInspectionId(String inspectionId) {
         this.inspectionId = inspectionId;
     }
 
@@ -59,20 +62,11 @@ public class Specific {
         this.unit = unit;
     }
 
-
     public String getRef() {
         return ref;
     }
 
     public void setRef(String ref) {
         this.ref = ref;
-    }
-
-    public Inspection getInspection() {
-        return inspection;
-    }
-
-    public void setInspection(Inspection inspection) {
-        this.inspection = inspection;
     }
 }

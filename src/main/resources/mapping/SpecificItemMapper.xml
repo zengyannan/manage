@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.SpecificItemMapper" >
+
+    <resultMap id="BaseResultMap" type="com.md.manage.domain.SpecificItem" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="result" property="result" jdbcType="VARCHAR" />
+        <result column="tips" property="tips" jdbcType="INTEGER" />
+        <result column="specific_id" property="specificId" jdbcType="INTEGER" />
+        <result column="ls_id" property="lsId" jdbcType="INTEGER" />
+        <result column="checker" property="checker" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="WithSpecificResultMap" type="com.md.manage.domain.SpecificItem" >
+        <id column="si_id" property="id" jdbcType="INTEGER" />
+        <result column="si_result" property="result" jdbcType="VARCHAR" />
+        <result column="si_tips" property="tips" jdbcType="INTEGER" />
+        <result column="si_specific_id" property="specificId" jdbcType="INTEGER" />
+        <result column="si_ls_id" property="lsId" jdbcType="INTEGER" />
+        <result column="si_checker" property="checker" jdbcType="VARCHAR" />
+        <association property="specific" javaType="com.md.manage.domain.Specific">
+            <id column="s_id" property="id" jdbcType="INTEGER" />
+            <result column="s_name" property="name" jdbcType="VARCHAR" />
+            <result column="s_zh_name" property="zhName" jdbcType="VARCHAR" />
+            <result column="s_inspection_id" property="inspectionId" jdbcType="INTEGER" />
+            <result column="s_unit" property="unit" jdbcType="VARCHAR" />
+            <result column="s_ref" property="ref" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        id, result, tips, specific_id, ls_id, checker
+    </sql>
+
+    <sql id="With_Specific_Column_List" >
+        si.id si_id, si.result si_result,si.tips si_tips,si.specific_id si_specific_id,
+        si.ls_id si_ls_id,si.checker si_checker,
+        s.id s_id, s.name s_name, s.zh_name s_zh_name, s.inspection_id s_inspection_id,
+        s.unit s_unit, s.ref s_ref
+    </sql>
+
+
+    <insert id="insert" parameterType="com.md.manage.domain.SpecificItem" useGeneratedKeys="true" keyProperty="id">
+        insert into `specific_item`
+        (result,tips,specific_id,ls_id,checker)
+        values
+        (#{result},#{tips},#{specificId},#{lsId},#{checker})
+    </insert>
+
+    <update id="update" parameterType="com.md.manage.domain.SpecificItem">
+        update `specific_item` set
+        <if test="result!=null"> result=#{result}</if>
+        <if test="tips!=null"> ,tips=#{tips}</if>
+        <if test="specificId!=null"> ,specific_id=#{specificId}</if>
+        <if test="lsId!=null"> ,ls_id=#{lsId}</if>
+        <if test="checker!=null"> ,checker=#{checker}</if>
+        where id= #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `specific_item` where id=#{id}
+    </delete>
+
+
+    <select id="findAll" resultMap="WithSpecificResultMap">
+        select <include refid="With_Specific_Column_List" /> from `specific_item` si
+        left join `specific` s on si.specific_id = s.id
+    </select>
+
+
+</mapper>

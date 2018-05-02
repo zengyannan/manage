@@ -10,10 +10,12 @@ public interface OrganMapper {
 
     List<Organ> findAll();
 
-    int  insert(Organ role);
+    int  insert(Organ organ);
 
-    int update(Organ role);
+    int update(Organ organ);
 
     int delete(@Param("id") Integer id);
+
+    List<Organ> getAllOrgan();
 
 }

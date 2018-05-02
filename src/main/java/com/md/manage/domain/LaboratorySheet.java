@@ -21,6 +21,10 @@ public class LaboratorySheet {
 
     private Date updateTime;
 
+    private Patient patient;
+
+    private Hr doctor;
+
     public Integer getId() {
         return id;
     }
@@ -75,5 +79,21 @@ public class LaboratorySheet {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Hr getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Hr doctor) {
+        this.doctor = doctor;
     }
 }

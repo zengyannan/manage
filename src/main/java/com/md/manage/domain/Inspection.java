@@ -15,6 +15,9 @@ public class Inspection {
 
     private String checkAddress;
 
+
+    private Organ organ;
+
     public Inspection() {
     }
 
@@ -56,5 +59,14 @@ public class Inspection {
 
     public void setCheckAddress(String checkAddress) {
         this.checkAddress = checkAddress;
+    }
+
+
+    public Organ getOrgan() {
+        return organ;
+    }
+
+    public void setOrgan(Organ organ) {
+        this.organ = organ;
     }
 }
