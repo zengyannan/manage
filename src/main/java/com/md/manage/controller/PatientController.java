@@ -61,6 +61,12 @@ public class PatientController {
         int effect = patientService.deletePatient(id);
         return new JsonResult().success(effect);
     }
-    
+
+
+    //患者端接口
+    @GetMapping("/patient/{name}/{idCard}/getInfo")
+    public JsonResult getPatientInfo(){
+        return new JsonResult().success(null);
+    }
 
 }

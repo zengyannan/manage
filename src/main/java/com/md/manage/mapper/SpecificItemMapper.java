@@ -10,6 +10,8 @@ public interface SpecificItemMapper {
 
     List<SpecificItem> findAll();
 
+    List<SpecificItem> getListByLsId(@Param("lsId") Integer lsId);
+
     int insert(SpecificItem specificItem);
 
     int update(SpecificItem specificItem);

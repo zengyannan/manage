@@ -8,6 +8,7 @@
         <result column="hr_id" property="doctorId" jdbcType="INTEGER" />
         <result column="status" property="status" jdbcType="INTEGER" />
         <result column="suggest" property="suggest" jdbcType="VARCHAR" />
+        <result column="system_suggest" property="systemSuggest" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime"  />
         <result column="update_time" property="updateTime"  />
     </resultMap>
@@ -18,11 +19,14 @@
         <result column="ls_hr_id" property="doctorId" jdbcType="INTEGER" />
         <result column="ls_status" property="status" jdbcType="INTEGER" />
         <result column="ls_suggest" property="suggest" jdbcType="VARCHAR" />
+        <result column="ls_system_suggest" property="systemSuggest" jdbcType="VARCHAR" />
         <result column="ls_create_time" property="createTime"  />
         <result column="ls_update_time" property="updateTime"  />
         <association property="patient" javaType="com.md.manage.domain.Patient">
             <id column="p_id" property="id" jdbcType="INTEGER" />
             <result column="p_name" property="name" jdbcType="VARCHAR" />
+            <result column="p_id_card" property="idCard" jdbcType="VARCHAR" />
+            <result column="p_phone" property="phone" jdbcType="VARCHAR" />
         </association>
         <association property="doctor" javaType="com.md.manage.domain.Hr">
             <id column="d_id" property="id" jdbcType="INTEGER" />
@@ -31,25 +35,52 @@
     </resultMap>
 
 
+
     <sql id="Base_Column_List" >
-        id, patient_id, hr_id, status, suggest, create_time,update_time
+        id, patient_id, hr_id, status, suggest, create_time,update_time,system_suggest
     </sql>
 
     <sql id="With_PatientAndDoctor_Column_List" >
-        ls.id ls_id, ls.patient_id ls_patient_id, ls.hr_id ls_hr_id,
+        ls.id ls_id, ls.patient_id ls_patient_id, ls.hr_id ls_hr_id,ls.system_suggest ls_system_suggest,
         ls.status ls_status, ls.suggest ls_suggest, ls.create_time ls_create_time,
         ls.update_time ls_update_time,
-        p.id p_id, p.name p_name,
+        p.id p_id, p.name p_name,p.id_card p_id_card,p.phone p_phone,
         d.id d_id, d.name d_name
     </sql>
 
 
-
-    <select id="findAll" resultMap="WithPatientAndDoctorResultMap">
+    <select id="getListByPage"   resultMap="WithPatientAndDoctorResultMap">
         select <include refid="With_PatientAndDoctor_Column_List" /> from `laboratory_sheet` ls
         left join `patient` p on ls.patient_id = p.id
         left join `hr` d on ls.hr_id = d.id
+        <where>
+            ls.hr_id = #{doctorId}
+        </where>
+        <if test="page!=null">
+            limit #{page.offset},#{page.pageSize}
+        </if>
     </select>
 
+    <select id="findAll"  resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `laboratory_sheet`
+    </select>
+
+
+    <select id="countByDoctorId" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        select count(0) from `laboratory_sheet`
+        <where>
+            hr_id =#{doctorId}
+        </where>
+    </select>
+
+
+    <update id="setSuggest">
+        update `laboratory_sheet` set
+        <if test="suggest!=null">suggest = #{suggest}</if>
+        <if test="status!=null"> ,status = #{status}</if>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 
 </mapper>

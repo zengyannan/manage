@@ -31,6 +31,19 @@ public class SpecificItemController {
         PageInfo<SpecificItem> pageInfo  = new PageInfo<>(specificItemList);
         return new JsonResult().success(pageInfo);
     }
+
+    @GetMapping("/api/specificItem/{lsId}/lsId/list")
+    public JsonResult getSpecificItemListByLsId(@Valid PageModel page,
+                                                BindingResult result,
+                                                @PathVariable String lsId){
+        CommonUtils.validateParams(result);
+        PageHelper.startPage(page.getPageNum(),page.getPageSize());
+        List<SpecificItem> specificItemList = specificItemService.getListByLsId(lsId);
+        PageInfo<SpecificItem> pageInfo  = new PageInfo<>(specificItemList);
+        return new JsonResult().success(pageInfo);
+    }
+
+
     @GetMapping("/api/specificItem/all")
     public JsonResult getAllSpecificItem(){
         List<SpecificItem> specificItemList = specificItemService.findAll();

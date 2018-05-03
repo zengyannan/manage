@@ -31,10 +31,10 @@ public class TokenInterceptor implements HandlerInterceptor{
             String token = null;
             Hr hr=null;
             if(req.getHeader("token")!=null){
-                JsonFactory factory = new JsonFactory();
-                factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+//                JsonFactory factory = new JsonFactory();
+//                factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
                 ObjectMapper objectMapper = new ObjectMapper();
-                token = req.getHeader("token");
+//                token = req.getHeader("token");
                 Map json =  objectMapper.readValue(req.getHeader("token"), HashMap.class);
                 token =  "token:"+json.get("token");
                 hr =(Hr) redisService.get(token);

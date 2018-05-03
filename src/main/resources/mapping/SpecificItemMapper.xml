@@ -28,6 +28,30 @@
         </association>
     </resultMap>
 
+    <resultMap id="WithSpecificAndInspectionResultMap" type="com.md.manage.domain.SpecificItem" >
+        <id column="si_id" property="id" jdbcType="INTEGER" />
+        <result column="si_result" property="result" jdbcType="VARCHAR" />
+        <result column="si_tips" property="tips" jdbcType="INTEGER" />
+        <result column="si_specific_id" property="specificId" jdbcType="INTEGER" />
+        <result column="si_ls_id" property="lsId" jdbcType="INTEGER" />
+        <result column="si_checker" property="checker" jdbcType="VARCHAR" />
+        <association property="specific" javaType="com.md.manage.domain.Specific">
+            <id column="s_id" property="id" jdbcType="INTEGER" />
+            <result column="s_name" property="name" jdbcType="VARCHAR" />
+            <result column="s_zh_name" property="zhName" jdbcType="VARCHAR" />
+            <result column="s_inspection_id" property="inspectionId" jdbcType="INTEGER" />
+            <result column="s_unit" property="unit" jdbcType="VARCHAR" />
+            <result column="s_ref" property="ref" jdbcType="VARCHAR" />
+            <association property="inspection" javaType="com.md.manage.domain.Inspection">
+                <id column="i_id" property="id" jdbcType="INTEGER" />
+                <result column="i_name" property="name" jdbcType="VARCHAR" />
+                <result column="i_zh_name" property="zhName" jdbcType="VARCHAR" />
+                <result column="i_organ_id" property="organId" jdbcType="INTEGER" />
+                <result column="i_check_address" property="checkAddress" jdbcType="INTEGER" />
+            </association>
+        </association>
+    </resultMap>
+
 
     <sql id="Base_Column_List" >
         id, result, tips, specific_id, ls_id, checker
@@ -38,6 +62,14 @@
         si.ls_id si_ls_id,si.checker si_checker,
         s.id s_id, s.name s_name, s.zh_name s_zh_name, s.inspection_id s_inspection_id,
         s.unit s_unit, s.ref s_ref
+    </sql>
+    <sql id="With_SpecificAndInspection_Column_List" >
+        si.id si_id, si.result si_result,si.tips si_tips,si.specific_id si_specific_id,
+        si.ls_id si_ls_id,si.checker si_checker,
+        s.id s_id, s.name s_name, s.zh_name s_zh_name, s.inspection_id s_inspection_id,
+        s.unit s_unit, s.ref s_ref,
+        i.id i_id, i.name i_name, i.zh_name i_zh_name, i.organ_id i_organ_id,
+        i.check_address i_check_address
     </sql>
 
 
@@ -66,6 +98,16 @@
     <select id="findAll" resultMap="WithSpecificResultMap">
         select <include refid="With_Specific_Column_List" /> from `specific_item` si
         left join `specific` s on si.specific_id = s.id
+    </select>
+
+    <select id="getListByLsId" resultMap="WithSpecificAndInspectionResultMap">
+        select <include refid="With_SpecificAndInspection_Column_List" /> from `specific_item` si
+        left join `specific` s on si.specific_id = s.id
+        left join `inspection` i on s.inspection_id = i.id
+        <where>
+            si.ls_id = #{lsId}
+        </where>
+        order by s.inspection_id asc
     </select>
 
 

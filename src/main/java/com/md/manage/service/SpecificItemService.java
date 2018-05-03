@@ -11,6 +11,8 @@ public interface SpecificItemService {
 
     List<SpecificItem> findAll();
 
+    List<SpecificItem> getListByLsId(String lsId);
+
 
     int  insertSpecificItem(SpecificItemModel specificItemModel);
 

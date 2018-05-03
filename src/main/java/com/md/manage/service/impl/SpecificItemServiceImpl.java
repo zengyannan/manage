@@ -32,6 +32,17 @@ public class SpecificItemServiceImpl implements SpecificItemService {
         return specificItemMapper.findAll();
     }
 
+
+    @Override
+    public List<SpecificItem> getListByLsId(String lsId) {
+        Validate validate = new IdMustBePositiveInt(lsId);
+        boolean r = validate.goCheck();
+        if (!r) {
+            throw new BaseException("检验单单号必须为正整数", 404, 10001);
+        }
+        return specificItemMapper.getListByLsId(Integer.parseInt(lsId));
+    }
+
     @Override
     public int insertSpecificItem(SpecificItemModel specificItemModel) {
         Validate validate = new IdMustBePositiveInt(specificItemModel.getSpecificId());

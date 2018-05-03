@@ -17,6 +17,8 @@ public class LaboratorySheet {
 
     private String suggest;
 
+    private String systemSuggest;
+
     private Date createTime;
 
     private Date updateTime;
@@ -95,5 +97,13 @@ public class LaboratorySheet {
 
     public void setDoctor(Hr doctor) {
         this.doctor = doctor;
+    }
+
+    public String getSystemSuggest() {
+        return systemSuggest;
+    }
+
+    public void setSystemSuggest(String systemSuggest) {
+        this.systemSuggest = systemSuggest;
     }
 }
