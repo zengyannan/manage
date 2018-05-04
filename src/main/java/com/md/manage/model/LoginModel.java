@@ -10,6 +10,9 @@ public class LoginModel {
     @NotBlank
     private String password;
 
+    @NotBlank
+    private String loginType;
+
 
 
 
@@ -28,5 +31,13 @@ public class LoginModel {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
 }

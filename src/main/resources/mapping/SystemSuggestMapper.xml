@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.md.manage.mapper.SystemSuggestMapper" >
+<resultMap id="BaseResultMap" type="com.md.manage.domain.SystemSuggest" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="specific_id" property="specificId" jdbcType="INTEGER" />
+    <result column="tips" property="tips" jdbcType="INTEGER" />
+    <result column="suggest"  property="suggest" jdbcType="VARCHAR" />
+</resultMap>
+
+
+<sql id="Base_Column_List" >
+    id,specific_id,tips,suggest
+</sql>
+
+
+<insert id="insert" parameterType="com.md.manage.domain.SystemSuggest" useGeneratedKeys="true" keyProperty="id">
+    insert into `system_suggest`
+    (specific_id,tips,suggest)
+    values
+    (#{specificId},#{tips},#{suggest})
+</insert>
+
+<update id="update" parameterType="com.md.manage.domain.SystemSuggest">
+    update `system_suggest` set
+    <if test="specificId!=null"> specific_id=#{specificId}</if>
+    <if test="tips!=null"> ,tips=#{tips}</if>
+    <if test="suggest!=null"> ,suggest=#{suggest}</if>
+    where id= #{id}
+</update>
+
+<delete id="delete" parameterType="java.lang.Integer">
+    delete from `system_suggest` where id=#{id}
+</delete>
+
+
+<select id="findAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from `system_suggest`
+</select>
+
+<select id="getBySpecificId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from `system_suggest`
+    <where>
+        specific_id = #{specificId}
+    </where>
+</select>
+
+
+</mapper>

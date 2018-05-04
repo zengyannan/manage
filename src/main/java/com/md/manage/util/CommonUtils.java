@@ -19,7 +19,7 @@ public class CommonUtils {
 
 
 
-    @Value("md.token.salt")
+    @Value("${md.token.salt}")
     private static String salt;
 
 

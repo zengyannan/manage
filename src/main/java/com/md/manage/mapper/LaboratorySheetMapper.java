@@ -12,10 +12,16 @@ public interface LaboratorySheetMapper {
 
     List<LaboratorySheet> findAll();
 
-    List<LaboratorySheet> getListByPage(@Param("page") Page page,@Param("doctorId") Integer doctorId);
+    List<LaboratorySheet> getListByPageAndDoctor(@Param("page") Page page,@Param("doctorId") Integer doctorId);
+
+    List<LaboratorySheet> getListByPageAndPatient(@Param("page") Page page,@Param("patientId") Integer patientId);
 
     int setSuggest(@Param("suggest")String suggest,@Param("id") int id,@Param("status") int status);
 
     long countByDoctorId(@Param("doctorId") Integer doctorId);
+
+    long countByPatientId(@Param("patientId") Integer patientId);
+
+    int insert(LaboratorySheet laboratorySheet);
 
 }

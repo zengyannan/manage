@@ -47,4 +47,18 @@ public class LaboratorySheetController {
         return new JsonResult().success(effect);
     }
 
+
+    @PostMapping("api/laboratorySheet/add/byDoctor")
+    public JsonResult insertByDoctor(@RequestBody Map<String,Object> json,@RequestHeader String token)throws Exception{
+        Map map=null;
+        try{
+            map = new ObjectMapper().readValue(token,HashMap.class);
+        }catch (Exception e){
+            throw e;
+        }
+        int effect = laboratorySheetService.insertByDoctorId(json.get("patientId").toString(),map.get("token").toString());
+        return new JsonResult().success(effect);
+    }
+
+
 }

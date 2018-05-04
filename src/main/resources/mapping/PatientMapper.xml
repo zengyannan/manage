@@ -10,19 +10,47 @@
         <result column="status"  property="status" jdbcType="INTEGER" />
         <result column="create_time" property="createTime"  />
         <result column="update_time" property="updateTime"  />
+        <result column="password" property="password" jdbcType="VARCHAR" />
     </resultMap>
 
 
+    <resultMap id="AssociationRoleResultMap" type="com.md.manage.domain.Patient" >
+        <id column="p_id" property="id" jdbcType="INTEGER" />
+        <result column="p_name" property="name" jdbcType="VARCHAR" />
+        <result column="p_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="p_address" property="address" jdbcType="VARCHAR" />
+        <result column="p_id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="p_status"  property="status" jdbcType="INTEGER" />
+        <result column="p_create_time" property="createTime"  />
+        <result column="p_update_time" property="updateTime"  />
+        <result column="p_password" property="password"  />
+        <collection property="roles" javaType="ArrayList" ofType="com.md.manage.domain.Role">
+            <id column="r_id" property="id" javaType="java.lang.Integer"></id>
+            <result column="r_name" property="name" javaType="java.lang.String"></result>
+            <result column="r_nameZh" property="nameZh" javaType="java.lang.String"></result>
+            <result column="r_status" property="status" javaType="java.lang.Integer"></result>
+            <result column="r_create_time" property="createTime"></result>
+            <result column="r_update_time" property="updateTime"></result>
+        </collection>
+    </resultMap>
+
     <sql id="Base_Column_List" >
-        id, name, phone, address, id_card, status, create_time, update_time
+        id, name, phone, address, id_card, status, create_time, update_time,password
     </sql>
 
 
+    <sql id="Association_Role_Column_List">
+        p.id p_id, p.name p_name, p.phone p_phone, p.address p_address, p.id_card p_id_card,
+        p.status p_status, p.create_time p_create_time, p.update_time p_update_time,p.password p_password,
+        r.id r_id , r.name r_name, r.nameZh r_nameZh ,r.create_time r_create_time, r.update_time r_update_time,
+        r.status r_status
+    </sql>
+
     <insert id="insert" parameterType="com.md.manage.domain.Patient" useGeneratedKeys="true" keyProperty="id">
         insert into `patient`
-        (name,phone,address,id_card,status,create_time,update_time)
+        (name,phone,address,id_card,status,create_time,update_time,password)
         values
-        (#{name},#{phone},#{address},#{idCard},#{status},#{createTime},#{updateTime})
+        (#{name},#{phone},#{address},#{idCard},#{status},#{createTime},#{updateTime},#{password})
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.Patient">
@@ -51,4 +79,47 @@
     </select>
 
 
+    <select id="getListByPage" resultMap="AssociationRoleResultMap" parameterType="com.md.manage.dto.Page">
+        select
+        <include refid="Association_Role_Column_List" />
+        from
+        (
+        select <include refid="Base_Column_List" /> from `patient` limit #{page.offset},#{page.pageSize}
+        ) p
+        left join `patient_role` pr on p.id = pr.pid
+        left join  `role` r on r.id = pr.rid
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(0) from `patient`
+    </select>
+
+    <select id="getPatientByName" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `patient`
+        <where>
+            name = #{name} and status = 1
+        </where>
+    </select>
+
+    <select id="getPatientByIdCard" resultMap="AssociationRoleResultMap">
+        select
+        <include refid="Association_Role_Column_List" />
+        from `patient` p
+        left join `patient_role` pr on p.id = pr.pid
+        left join  `role` r on r.id = pr.rid
+        <where>
+            p.id_card = #{idCard} and p.status = 1
+        </where>
+    </select>
+
+    <insert id="setRoles" useGeneratedKeys="true">
+        insert into `patient_role` (pid,rid) values
+        <foreach  collection="ids" item="id" open=" " close=" " separator="," >
+            (#{pid},#{id})
+        </foreach>
+    </insert>
+
+    <delete id="deletePatientRole">
+        delete from `patient_role`  where pid=#{id}
+    </delete>
 </mapper>

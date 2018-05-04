@@ -3,6 +3,7 @@ package com.md.manage.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.md.manage.domain.Patient;
+import com.md.manage.dto.Page;
 import com.md.manage.json.JsonResult;
 import com.md.manage.model.PatientModel;
 import com.md.manage.model.PageModel;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 
@@ -29,15 +31,13 @@ public class PatientController {
     @GetMapping("/api/patient/list")
     public JsonResult getPatientList(@Valid PageModel page, BindingResult result){
         CommonUtils.validateParams(result);
-        PageHelper.startPage(page.getPageNum(),page.getPageSize());
-        List<Patient> patientList = patientService.getPatientList();
-        PageInfo<Patient> pageInfo  = new PageInfo<>(patientList);
+        Page<Patient> pageInfo = patientService.getListByPage(page);
         return new JsonResult().success(pageInfo);
     }
 
     @GetMapping("/api/patient/all")
     public JsonResult getAllPatient(){
-        List<Patient> patientList = patientService.getPatientList();
+        List<Patient> patientList = patientService.getAllPatient();
         return new JsonResult().success(patientList);
     }
 
@@ -64,9 +64,14 @@ public class PatientController {
 
 
     //患者端接口
-    @GetMapping("/patient/{name}/{idCard}/getInfo")
-    public JsonResult getPatientInfo(){
-        return new JsonResult().success(null);
+    @PostMapping("/patient/getInfo")
+    public JsonResult getPatientInfo(@RequestBody Map<String,Object> json){
+        String name = json.get("name").toString();
+        String idCard = json.get("idCard").toString();
+        Patient patient =patientService.getPatientByNameAndIdCard(name,idCard);
+        if(patient==null)
+            return new JsonResult().failure();
+        return new JsonResult().success(patient);
     }
 
 }

@@ -5,13 +5,19 @@ package com.md.manage.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.md.manage.domain.Hr;
 import com.md.manage.domain.LaboratorySheet;
+import com.md.manage.domain.SpecificItem;
+import com.md.manage.domain.SystemSuggest;
 import com.md.manage.dto.Page;
+import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.LaboratorySheetException;
 import com.md.manage.mapper.LaboratorySheetMapper;
+import com.md.manage.mapper.SpecificItemMapper;
+import com.md.manage.mapper.SystemSuggestMapper;
 import com.md.manage.model.PageModel;
 import com.md.manage.service.LaboratorySheetService;
 import com.md.manage.service.RedisService;
+import com.md.manage.util.CommonUtils;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +35,46 @@ public class LaboratorySheetServiceImpl implements LaboratorySheetService {
     private LaboratorySheetMapper laboratorySheetMapper;
 
     @Autowired
+    private SpecificItemMapper specificItemMapper;
+
+    @Autowired
+    private SystemSuggestMapper systemSuggestMapper;
+
+
+    @Autowired
     private RedisService redisService;
 
     @Override
     public Page<LaboratorySheet> getLaboratorySheetList(PageModel pageModel,String token) {
-        Hr doctor = (Hr)redisService.get("token:"+token);
-        Long count = laboratorySheetMapper.countByDoctorId(doctor.getId());
-        Page<LaboratorySheet> pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
-        pageInfo.pagination();
-        List<LaboratorySheet> laboratorySheetList = laboratorySheetMapper.getListByPage(pageInfo,doctor.getId());
+        User user = (User) redisService.get("token:"+token);
+        List<LaboratorySheet> laboratorySheetList=null;
+        Page<LaboratorySheet> pageInfo=null;
+        if(user.getLoginType().equals("hr")){
+            Long count = laboratorySheetMapper.countByDoctorId(user.getId());
+            pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+            pageInfo.pagination();
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndDoctor(pageInfo,user.getId());
+        }else if(user.getLoginType().equals("patient")){
+            Long count = laboratorySheetMapper.countByPatientId(user.getId());
+            pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+            pageInfo.pagination();
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndPatient(pageInfo,user.getId());
+        }
+
+        for(LaboratorySheet laboratorySheet:laboratorySheetList){
+            List<SpecificItem> specificItemList = specificItemMapper.getListByLsId(laboratorySheet.getId());
+            List<SystemSuggest> systemSuggests =systemSuggestMapper.findAll();
+            StringBuilder suggest = new StringBuilder("");
+            for(SpecificItem specificItem :specificItemList){
+                for (SystemSuggest systemSuggest :systemSuggests){
+                    if(specificItem.getSpecificId()==systemSuggest.getSpecificId()
+                            &&specificItem.getTips()==systemSuggest.getTips()){
+                        suggest.append(systemSuggest.getSuggest());
+                    }
+                }
+            }
+            laboratorySheet.setSystemSuggest(suggest.toString());
+        }
         pageInfo.setList(laboratorySheetList);
         return  pageInfo;
     }
@@ -66,4 +103,28 @@ public class LaboratorySheetServiceImpl implements LaboratorySheetService {
         }
         return effect;
     }
+
+    @Override
+    public int insertByDoctorId(String patientId, String token) {
+        Validate validate = new IdMustBePositiveInt(patientId);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("patientId必须为正整数",404,10001);
+        }
+        User doctor = (User) redisService.get("token:"+token);
+        LaboratorySheet laboratorySheet =new LaboratorySheet();
+        laboratorySheet.setDoctorId(doctor.getId());
+        laboratorySheet.setPatientId(Integer.parseInt(patientId));
+        laboratorySheet.setStatus(1);
+        laboratorySheet.setSuggest("");
+        laboratorySheet.setSystemSuggest("");
+        laboratorySheet.setCreateTime(CommonUtils.getCurrentDate());
+        laboratorySheet.setUpdateTime(CommonUtils.getCurrentDate());
+        int effect=laboratorySheetMapper.insert(laboratorySheet);
+        if(effect==0){
+            throw new LaboratorySheetException("操作错误");
+        }
+        return effect;
+    }
+
 }

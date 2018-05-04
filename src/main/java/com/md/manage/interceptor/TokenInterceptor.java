@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.md.manage.domain.Hr;
+import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class TokenInterceptor implements HandlerInterceptor{
         }
         if(path.contains("/api/")){
             String token = null;
-            Hr hr=null;
+            User user= null;
             if(req.getHeader("token")!=null){
 //                JsonFactory factory = new JsonFactory();
 //                factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
@@ -37,9 +38,9 @@ public class TokenInterceptor implements HandlerInterceptor{
 //                token = req.getHeader("token");
                 Map json =  objectMapper.readValue(req.getHeader("token"), HashMap.class);
                 token =  "token:"+json.get("token");
-                hr =(Hr) redisService.get(token);
+                user =(User) redisService.get(token);
             }
-            if(hr==null){
+            if(user==null){
                 res.setStatus(401);
                 throw new BaseException("token不存在或已过期!");
             }

@@ -49,12 +49,31 @@
     </sql>
 
 
-    <select id="getListByPage"   resultMap="WithPatientAndDoctorResultMap">
+    <insert id="insert" parameterType="com.md.manage.domain.LaboratorySheet" useGeneratedKeys="true" keyProperty="id">
+        insert into `laboratory_sheet`
+        (patient_id,hr_id,status,suggest,create_time,update_time,system_suggest)
+        values
+        (#{patientId},#{doctorId},#{status},#{suggest},#{createTime},#{updateTime},#{systemSuggest})
+    </insert>
+
+
+    <select id="getListByPageAndDoctor"   resultMap="WithPatientAndDoctorResultMap">
         select <include refid="With_PatientAndDoctor_Column_List" /> from `laboratory_sheet` ls
         left join `patient` p on ls.patient_id = p.id
         left join `hr` d on ls.hr_id = d.id
         <where>
             ls.hr_id = #{doctorId}
+        </where>
+        <if test="page!=null">
+            limit #{page.offset},#{page.pageSize}
+        </if>
+    </select>
+    <select id="getListByPageAndPatient"   resultMap="WithPatientAndDoctorResultMap">
+        select <include refid="With_PatientAndDoctor_Column_List" /> from `laboratory_sheet` ls
+        left join `patient` p on ls.patient_id = p.id
+        left join `hr` d on ls.hr_id = d.id
+        <where>
+            ls.patient_id = #{patientId}
         </where>
         <if test="page!=null">
             limit #{page.offset},#{page.pageSize}
@@ -70,6 +89,12 @@
         select count(0) from `laboratory_sheet`
         <where>
             hr_id =#{doctorId}
+        </where>
+    </select>
+    <select id="countByPatientId" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        select count(0) from `laboratory_sheet`
+        <where>
+            patient_id =#{patientId}
         </where>
     </select>
 

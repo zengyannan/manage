@@ -41,8 +41,12 @@ md:
   menu:
     root:
       id: 0
-
-
+  patient:
+    role:
+      id: 18
+  token:
+    salt: avokjbk123987..
+    patientSalt: avokjbk123983332
 pagehelper:
     helperDialect: mysql
     reasonable: true

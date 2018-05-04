@@ -15,4 +15,6 @@ public interface LaboratorySheetService {
 
     int setSuggest(String suggest,String lsId);
 
+    int insertByDoctorId(String patientId, String token);
+
 }

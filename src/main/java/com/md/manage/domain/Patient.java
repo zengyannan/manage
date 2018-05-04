@@ -1,6 +1,7 @@
 package com.md.manage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 病人实体类
@@ -18,11 +19,15 @@ public class Patient {
 
     private String idCard;
 
+    private String  password;
+
     private Integer status;
 
     private Date createTime;
 
     private Date  updateTime;
+
+    private List<Role> roles;
 
     public Date getCreateTime() {
         return createTime;
@@ -74,6 +79,14 @@ public class Patient {
     }
 
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -88,5 +101,14 @@ public class Patient {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
