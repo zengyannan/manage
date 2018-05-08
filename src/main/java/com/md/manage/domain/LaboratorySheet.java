@@ -19,6 +19,8 @@ public class LaboratorySheet {
 
     private String systemSuggest;
 
+    private Integer organId;
+
     private Date createTime;
 
     private Date updateTime;
@@ -105,5 +107,13 @@ public class LaboratorySheet {
 
     public void setSystemSuggest(String systemSuggest) {
         this.systemSuggest = systemSuggest;
+    }
+
+    public Integer getOrganId() {
+        return organId;
+    }
+
+    public void setOrganId(Integer organId) {
+        this.organId = organId;
     }
 }

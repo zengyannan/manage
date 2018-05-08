@@ -9,6 +9,7 @@
         <result column="status" property="status" jdbcType="INTEGER" />
         <result column="suggest" property="suggest" jdbcType="VARCHAR" />
         <result column="system_suggest" property="systemSuggest" jdbcType="VARCHAR" />
+        <result column="organ_id" property="organId" jdbcType="INTEGER" ></result>
         <result column="create_time" property="createTime"  />
         <result column="update_time" property="updateTime"  />
     </resultMap>
@@ -20,6 +21,7 @@
         <result column="ls_status" property="status" jdbcType="INTEGER" />
         <result column="ls_suggest" property="suggest" jdbcType="VARCHAR" />
         <result column="ls_system_suggest" property="systemSuggest" jdbcType="VARCHAR" />
+        <result column="ls_organ_id" property="organId" jdbcType="INTEGER" />
         <result column="ls_create_time" property="createTime"  />
         <result column="ls_update_time" property="updateTime"  />
         <association property="patient" javaType="com.md.manage.domain.Patient">
@@ -37,12 +39,12 @@
 
 
     <sql id="Base_Column_List" >
-        id, patient_id, hr_id, status, suggest, create_time,update_time,system_suggest
+        id, patient_id, hr_id, status, suggest, create_time,update_time,system_suggest,organ_id
     </sql>
 
     <sql id="With_PatientAndDoctor_Column_List" >
         ls.id ls_id, ls.patient_id ls_patient_id, ls.hr_id ls_hr_id,ls.system_suggest ls_system_suggest,
-        ls.status ls_status, ls.suggest ls_suggest, ls.create_time ls_create_time,
+        ls.status ls_status, ls.suggest ls_suggest, ls.create_time ls_create_time,ls.organ_id ls_organ_id,
         ls.update_time ls_update_time,
         p.id p_id, p.name p_name,p.id_card p_id_card,p.phone p_phone,
         d.id d_id, d.name d_name
@@ -51,9 +53,9 @@
 
     <insert id="insert" parameterType="com.md.manage.domain.LaboratorySheet" useGeneratedKeys="true" keyProperty="id">
         insert into `laboratory_sheet`
-        (patient_id,hr_id,status,suggest,create_time,update_time,system_suggest)
+        (patient_id,hr_id,status,suggest,create_time,update_time,system_suggest,organ_id)
         values
-        (#{patientId},#{doctorId},#{status},#{suggest},#{createTime},#{updateTime},#{systemSuggest})
+        (#{patientId},#{doctorId},#{status},#{suggest},#{createTime},#{updateTime},#{systemSuggest},#{organId})
     </insert>
 
 
@@ -63,7 +65,11 @@
         left join `hr` d on ls.hr_id = d.id
         <where>
             ls.hr_id = #{doctorId}
+            <if test="organId!=null">
+                and ls.organ_id = #{organId}
+            </if>
         </where>
+        order by ls.status asc,ls.id desc
         <if test="page!=null">
             limit #{page.offset},#{page.pageSize}
         </if>
@@ -74,7 +80,11 @@
         left join `hr` d on ls.hr_id = d.id
         <where>
             ls.patient_id = #{patientId}
+            <if test="organId!=null">
+                and ls.organ_id = #{organId}
+            </if>
         </where>
+        order by ls.id asc
         <if test="page!=null">
             limit #{page.offset},#{page.pageSize}
         </if>

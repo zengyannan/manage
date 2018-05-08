@@ -25,4 +25,5 @@ public interface PatientService {
 
     Patient getPatientByNameAndIdCard(String name,String idCard);
 
+    Patient getPatientByToken(String token);
 }

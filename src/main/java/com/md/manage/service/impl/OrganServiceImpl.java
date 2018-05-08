@@ -77,4 +77,19 @@ public class OrganServiceImpl implements OrganService {
         }
         return effect;
     }
+
+
+    @Override
+    public Organ getOrganById(String id) {
+        Validate validate =new IdMustBePositiveInt(id);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("参数错误",404,10001);
+        }
+        Organ organ = organMapper.getOrganById(Integer.parseInt(id));
+        if(organ==null){
+            throw new OrganException("该器官疾病不存在");
+        }
+        return organ;
+    }
 }

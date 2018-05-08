@@ -2,12 +2,14 @@ package com.md.manage.service.impl;
 
 import com.md.manage.domain.Patient;
 import com.md.manage.dto.Page;
+import com.md.manage.dto.User;
 import com.md.manage.exception.BaseException;
 import com.md.manage.exception.PatientException;
 import com.md.manage.mapper.PatientMapper;
 import com.md.manage.model.PageModel;
 import com.md.manage.model.PatientModel;
 import com.md.manage.service.PatientService;
+import com.md.manage.service.RedisService;
 import com.md.manage.util.CommonUtils;
 import com.md.manage.validate.IdMustBePositiveInt;
 import com.md.manage.validate.Validate;
@@ -28,6 +30,10 @@ public class PatientServiceImpl implements PatientService{
 
     @Value("${md.patient.role.id}")
     private String patientRoleId;
+
+
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public List<Patient> findAll() {
@@ -111,5 +117,19 @@ public class PatientServiceImpl implements PatientService{
             return patient;
         }
         return null;
+    }
+
+    @Override
+    public Patient getPatientByToken(String token) {
+        User user = (User) redisService.get("token:" + token);
+        if (user.getLoginType().equals("patient")) {
+            Patient patient = patientMapper.getPatientById(user.getId());
+            if (patient == null) {
+                throw new PatientException("患者账户不存在");
+            }
+            return patient;
+        }else {
+            throw new PatientException("患者账户不存在");
+        }
     }
 }

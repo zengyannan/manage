@@ -53,12 +53,52 @@ public class LaboratorySheetServiceImpl implements LaboratorySheetService {
             Long count = laboratorySheetMapper.countByDoctorId(user.getId());
             pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
             pageInfo.pagination();
-            laboratorySheetList = laboratorySheetMapper.getListByPageAndDoctor(pageInfo,user.getId());
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndDoctor(pageInfo,user.getId(),null);
         }else if(user.getLoginType().equals("patient")){
             Long count = laboratorySheetMapper.countByPatientId(user.getId());
             pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
             pageInfo.pagination();
-            laboratorySheetList = laboratorySheetMapper.getListByPageAndPatient(pageInfo,user.getId());
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndPatient(pageInfo,user.getId(),null);
+        }
+
+        for(LaboratorySheet laboratorySheet:laboratorySheetList){
+            List<SpecificItem> specificItemList = specificItemMapper.getListByLsId(laboratorySheet.getId());
+            List<SystemSuggest> systemSuggests =systemSuggestMapper.findAll();
+            StringBuilder suggest = new StringBuilder("");
+            for(SpecificItem specificItem :specificItemList){
+                for (SystemSuggest systemSuggest :systemSuggests){
+                    if(specificItem.getSpecificId()==systemSuggest.getSpecificId()
+                            &&specificItem.getTips()==systemSuggest.getTips()){
+                        suggest.append(systemSuggest.getSuggest());
+                    }
+                }
+            }
+            laboratorySheet.setSystemSuggest(suggest.toString());
+        }
+        pageInfo.setList(laboratorySheetList);
+        return  pageInfo;
+    }
+
+    @Override
+    public Page<LaboratorySheet> getLaboratorySheetListByOrganId(PageModel pageModel,String organId,String token) {
+        Validate validate = new IdMustBePositiveInt(organId);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("organId必须为正整数");
+        }
+        User user = (User) redisService.get("token:"+token);
+        List<LaboratorySheet> laboratorySheetList=null;
+        Page<LaboratorySheet> pageInfo=null;
+        if(user.getLoginType().equals("hr")){
+            Long count = laboratorySheetMapper.countByDoctorId(user.getId());
+            pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+            pageInfo.pagination();
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndDoctor(pageInfo,user.getId(),Integer.parseInt(organId));
+        }else if(user.getLoginType().equals("patient")){
+            Long count = laboratorySheetMapper.countByPatientId(user.getId());
+            pageInfo = new Page(pageModel.getPageNum(),pageModel.getPageSize(),count);
+            pageInfo.pagination();
+            laboratorySheetList = laboratorySheetMapper.getListByPageAndPatient(pageInfo,user.getId(),Integer.parseInt(organId));
         }
 
         for(LaboratorySheet laboratorySheet:laboratorySheetList){
@@ -105,16 +145,22 @@ public class LaboratorySheetServiceImpl implements LaboratorySheetService {
     }
 
     @Override
-    public int insertByDoctorId(String patientId, String token) {
+    public int insertByDoctorId(String patientId, String organId,String token) {
         Validate validate = new IdMustBePositiveInt(patientId);
         boolean r = validate.goCheck();
         if(!r){
             throw new BaseException("patientId必须为正整数",404,10001);
         }
+        validate = new IdMustBePositiveInt(organId);
+        r = validate.goCheck();
+        if(!r){
+            throw new BaseException("organId必须为正整数",404,10001);
+        }
         User doctor = (User) redisService.get("token:"+token);
         LaboratorySheet laboratorySheet =new LaboratorySheet();
         laboratorySheet.setDoctorId(doctor.getId());
         laboratorySheet.setPatientId(Integer.parseInt(patientId));
+        laboratorySheet.setOrganId(Integer.parseInt(organId));
         laboratorySheet.setStatus(1);
         laboratorySheet.setSuggest("");
         laboratorySheet.setSystemSuggest("");

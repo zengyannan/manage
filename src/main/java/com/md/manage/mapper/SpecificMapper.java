@@ -10,7 +10,10 @@ public interface SpecificMapper {
 
     List<Specific> findAll();
 
+    List<Specific> getListByOrganId(@Param("organId") Integer organId);
+
     Specific findById(@Param("id") Integer id);
+
 
     int insert(Specific specific);
 

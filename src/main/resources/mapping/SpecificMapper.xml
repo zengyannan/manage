@@ -73,5 +73,13 @@
         left join `inspection` i on s.inspection_id = i.id
     </select>
 
+    <select id="getListByOrganId" resultMap="WithInspectionResultMap">
+        select <include refid="With_Inspection_Column_List" /> from `specific` s
+        left join `inspection` i on s.inspection_id = i.id
+        <where>
+            i.organ_id = #{organId}
+        </where>
+    </select>
+
 
 </mapper>

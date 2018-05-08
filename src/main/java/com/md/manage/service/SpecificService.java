@@ -11,6 +11,8 @@ public interface SpecificService {
 
     List<Specific> findAll();
 
+    List<Specific> getListByOrganId(String organId);
+
 
     int  insertSpecific(SpecificModel specificModel);
 

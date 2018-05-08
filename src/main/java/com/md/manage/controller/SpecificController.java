@@ -31,9 +31,18 @@ public class SpecificController {
         PageInfo<Specific> pageInfo  = new PageInfo<>(specificList);
         return new JsonResult().success(pageInfo);
     }
+
+
+
     @GetMapping("/api/specific/all")
     public JsonResult getAllSpecific(){
         List<Specific> specificList = specificService.findAll();
+        return new JsonResult().success(specificList);
+    }
+
+    @GetMapping("/api/specific/list/byOrganId/{organId}")
+    public JsonResult getSpecificByOrganId(@PathVariable("organId") String organId){
+        List<Specific> specificList = specificService.getListByOrganId(organId);
         return new JsonResult().success(specificList);
     }
 

@@ -1,5 +1,6 @@
 package com.md.manage.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.md.manage.domain.Patient;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +62,20 @@ public class PatientController {
     public JsonResult deletePatient(@PathVariable("id") String id){
         int effect = patientService.deletePatient(id);
         return new JsonResult().success(effect);
+    }
+
+    @GetMapping("/api/patient/byToken")
+    public JsonResult getPatientByToken(@RequestHeader String token)throws Exception{
+        Map json=null;
+        try{
+            json = new ObjectMapper().readValue(token,HashMap.class);
+        }catch (Exception e){
+            throw e;
+        }
+        Patient patient =patientService.getPatientByToken(json.get("token").toString());
+        if(patient==null)
+            return new JsonResult().failure();
+        return new JsonResult().success(patient);
     }
 
 

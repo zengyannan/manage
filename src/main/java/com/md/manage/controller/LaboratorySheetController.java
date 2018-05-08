@@ -35,6 +35,19 @@ public class LaboratorySheetController {
         return new JsonResult().success(pageInfo);
     }
 
+    @GetMapping("api/laboratorySheet/list/byOrgan")
+    public JsonResult getLaboratorySheetListByOrganId(@Valid PageModel page, BindingResult result,@RequestHeader String token,String organId)throws Exception{
+        CommonUtils.validateParams(result);
+        Map json=null;
+        try{
+            json = new ObjectMapper().readValue(token,HashMap.class);
+        }catch (Exception e){
+            throw e;
+        }
+        Page<LaboratorySheet> pageInfo = laboratorySheetService.getLaboratorySheetListByOrganId(page,organId,json.get("token").toString());
+        return new JsonResult().success(pageInfo);
+    }
+
     @GetMapping("api/laboratorySheet/all")
     public JsonResult getAllLaboratorySheet(){
         List<LaboratorySheet> laboratorySheetList = laboratorySheetService.findAll();
@@ -56,7 +69,11 @@ public class LaboratorySheetController {
         }catch (Exception e){
             throw e;
         }
-        int effect = laboratorySheetService.insertByDoctorId(json.get("patientId").toString(),map.get("token").toString());
+        int effect = laboratorySheetService.insertByDoctorId(
+                json.get("patientId").toString(),
+                json.get("organId").toString(),
+                map.get("token").toString()
+        );
         return new JsonResult().success(effect);
     }
 

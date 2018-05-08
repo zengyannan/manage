@@ -112,6 +112,17 @@
         </where>
     </select>
 
+    <select id="getPatientById" resultMap="AssociationRoleResultMap">
+        select
+        <include refid="Association_Role_Column_List" />
+        from `patient` p
+        left join `patient_role` pr on p.id = pr.pid
+        left join  `role` r on r.id = pr.rid
+        <where>
+            p.id = #{id} and p.status = 1
+        </where>
+    </select>
+
     <insert id="setRoles" useGeneratedKeys="true">
         insert into `patient_role` (pid,rid) values
         <foreach  collection="ids" item="id" open=" " close=" " separator="," >

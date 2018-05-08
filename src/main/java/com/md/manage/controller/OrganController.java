@@ -61,5 +61,11 @@ public class OrganController {
     }
 
 
+    @GetMapping("/api/organ/{id}")
+    public JsonResult getOrganById(@PathVariable("id") String id){
+        Organ organ = organService.getOrganById(id);
+        return new JsonResult().success(organ);
+    }
+
 
 }

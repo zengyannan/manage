@@ -18,4 +18,6 @@ public interface OrganMapper {
 
     List<Organ> getAllOrgan();
 
+    Organ getOrganById(@Param("id") Integer id);
+
 }

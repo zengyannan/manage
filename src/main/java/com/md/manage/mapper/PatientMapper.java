@@ -32,4 +32,5 @@ public interface PatientMapper {
 
     int deletePatientRole(@Param("id") Integer id);
 
+    Patient getPatientById(@Param("id") Integer id);
 }

@@ -29,6 +29,17 @@ public class SpecificServiceImpl implements SpecificService {
         return specificMapper.findAll();
     }
 
+
+    @Override
+    public List<Specific> getListByOrganId(String organId) {
+        Validate validate = new IdMustBePositiveInt(organId);
+        boolean r= validate.goCheck();
+        if(!r){
+            throw new BaseException("organId必须为正整数",404,10001);
+        }
+        return specificMapper.getListByOrganId(Integer.parseInt(organId));
+    }
+
     @Override
     public int insertSpecific(SpecificModel specificModel) {
         Specific specific = new Specific();

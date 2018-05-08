@@ -42,5 +42,9 @@
         select <include refid="Base_Column_List" /> from `organ` o where status=1
     </select>
 
+    <select id="getOrganById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from `organ` o where status=1
+        and id = #{id}
+    </select>
 
 </mapper>

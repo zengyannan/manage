@@ -18,4 +18,7 @@ public interface OrganService {
 
     int deleteOrgan(String id);
 
+    Organ getOrganById(String id);
+
+
 }
