@@ -61,4 +61,5 @@ public interface HrMapper {
 
     int setRoles(@Param("uid") int uid,@Param("ids") List<Integer> ids);
 
+    List<Hr> getListByRoleName(@Param("roleName") String roleName);
 }

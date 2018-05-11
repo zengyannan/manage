@@ -20,4 +20,7 @@ public interface LaboratorySheetService {
 
     int insertByDoctorId(String patientId,String organId,String token);
 
+    int insertByPatientId(String doctorId,String organId,String token);
+
+
 }

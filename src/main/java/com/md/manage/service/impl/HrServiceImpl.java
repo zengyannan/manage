@@ -161,4 +161,10 @@ public class HrServiceImpl implements HrService {
         }
         return effect;
     }
+
+
+    @Override
+    public List<Hr> getListByRoleName(String roleName) {
+        return hrMapper.getListByRoleName(roleName);
+    }
 }

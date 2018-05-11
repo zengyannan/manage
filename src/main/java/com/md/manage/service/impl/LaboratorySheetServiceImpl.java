@@ -173,4 +173,32 @@ public class LaboratorySheetServiceImpl implements LaboratorySheetService {
         return effect;
     }
 
+    @Override
+    public int insertByPatientId(String doctorId, String organId, String token) {
+        Validate validate = new IdMustBePositiveInt(doctorId);
+        boolean r = validate.goCheck();
+        if(!r){
+            throw new BaseException("doctorId必须为正整数",404,10001);
+        }
+        validate = new IdMustBePositiveInt(organId);
+        r = validate.goCheck();
+        if(!r){
+            throw new BaseException("organId必须为正整数",404,10001);
+        }
+        User patient = (User) redisService.get("token:"+token);
+        LaboratorySheet laboratorySheet =new LaboratorySheet();
+        laboratorySheet.setDoctorId(Integer.parseInt(doctorId));
+        laboratorySheet.setPatientId(patient.getId());
+        laboratorySheet.setOrganId(Integer.parseInt(organId));
+        laboratorySheet.setStatus(1);
+        laboratorySheet.setSuggest("");
+        laboratorySheet.setSystemSuggest("");
+        laboratorySheet.setCreateTime(CommonUtils.getCurrentDate());
+        laboratorySheet.setUpdateTime(CommonUtils.getCurrentDate());
+        int effect=laboratorySheetMapper.insert(laboratorySheet);
+        if(effect==0){
+            throw new LaboratorySheetException("操作错误");
+        }
+        return effect;
+    }
 }

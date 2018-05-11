@@ -94,7 +94,7 @@ public class HrController {
     }
 
     /**
-     * 得到分页的管理员列表
+     * 分配角色
      */
     @PostMapping("/api/hr/setRoles")
     public JsonResult setRoles(@RequestBody Map<String, Object> params) {
@@ -102,6 +102,15 @@ public class HrController {
         String ids = params.get("ids").toString();
         int effect = hrService.setRoles(uid,ids);
         return new JsonResult().success(effect);
+    }
+
+    /**
+     * 根据角色名得到hrs
+     */
+    @GetMapping("/api/hr/list/byRoleName")
+    public JsonResult getListByRoleName(String roleName) {
+        List<Hr> hrs = hrService.getListByRoleName(roleName);
+        return new JsonResult().success(hrs);
     }
 
 }

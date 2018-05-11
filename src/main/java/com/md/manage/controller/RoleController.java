@@ -80,12 +80,12 @@ public class RoleController {
     }
 
     @GetMapping("/api/role/all")
-    public JsonResult getRoleList(@Valid PageModel pageModel, BindingResult result){
-        CommonUtils.validateParams(result);
-        PageHelper.startPage(pageModel.getPageNum(),pageModel.getPageSize());
+    public JsonResult getAllRole(){
+//        CommonUtils.validateParams(result);
+//        PageHelper.startPage(pageModel.getPageNum(),pageModel.getPageSize());
         List<Role> roles = roleService.findAll();
-        PageInfo<Role> pageInfo  = new PageInfo<>(roles);
-        return new JsonResult().success(pageInfo);
+//        PageInfo<Role> pageInfo  = new PageInfo<>(roles);
+        return new JsonResult().success(roles);
     }
 
 
