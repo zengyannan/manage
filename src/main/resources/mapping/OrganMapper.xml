@@ -22,10 +22,12 @@
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.Organ">
-        update `organ` set
-        <if test="name!=null"> name=#{name}</if>
-        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
-        <if test="status!=null"> ,status=#{status}</if>
+        update `organ`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="name!=null"> name=#{name},</if>
+        <if test="zhName!=null"> zh_name=#{zhName},</if>
+        <if test="status!=null"> status=#{status}</if>
+        </trim>
         where id= #{id}
     </update>
 

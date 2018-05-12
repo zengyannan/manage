@@ -54,12 +54,14 @@
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.Specific">
-        update `specific` set
-        <if test="name!=null"> name=#{name}</if>
-        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
-        <if test="inspectionId!=null"> ,inspection_id=#{inspectionId}</if>
-        <if test="unit!=null"> ,unit=#{unit}</if>
-        <if test="ref!=null"> ,ref=#{ref}</if>
+        update `specific`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="name!=null"> name=#{name},</if>
+        <if test="zhName!=null">zh_name=#{zhName},</if>
+        <if test="inspectionId!=null">inspection_id=#{inspectionId},</if>
+        <if test="unit!=null">unit=#{unit},</if>
+        <if test="ref!=null">ref=#{ref},</if>
+        </trim>
         where id= #{id}
     </update>
 

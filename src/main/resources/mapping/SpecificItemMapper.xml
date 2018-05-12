@@ -81,12 +81,14 @@
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.SpecificItem">
-        update `specific_item` set
-        <if test="result!=null"> result=#{result}</if>
-        <if test="tips!=null"> ,tips=#{tips}</if>
-        <if test="specificId!=null"> ,specific_id=#{specificId}</if>
-        <if test="lsId!=null"> ,ls_id=#{lsId}</if>
-        <if test="checker!=null"> ,checker=#{checker}</if>
+        update `specific_item`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="result!=null"> result=#{result},</if>
+        <if test="tips!=null">tips=#{tips},</if>
+        <if test="specificId!=null">specific_id=#{specificId},</if>
+        <if test="lsId!=null">ls_id=#{lsId},</if>
+        <if test="checker!=null">checker=#{checker},</if>
+        </trim>
         where id= #{id}
     </update>
 

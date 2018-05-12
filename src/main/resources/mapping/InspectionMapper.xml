@@ -43,11 +43,13 @@
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.Organ">
-        update `inspection` set
-        <if test="name!=null"> name=#{name}</if>
-        <if test="zhName!=null"> ,zh_name=#{zhName}</if>
-        <if test="organId!=null"> ,organ_id=#{organId}</if>
-        <if test="checkAddress!=null"> ,check_address=#{checkAddress}</if>
+        update `inspection`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="name!=null"> name=#{name},</if>
+        <if test="zhName!=null"> zh_name=#{zhName},</if>
+        <if test="organId!=null"> organ_id=#{organId},</if>
+        <if test="checkAddress!=null"> check_address=#{checkAddress}</if>
+        </trim>
         where id= #{id}
     </update>
 

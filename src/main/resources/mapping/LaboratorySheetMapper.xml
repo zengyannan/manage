@@ -110,9 +110,11 @@
 
 
     <update id="setSuggest">
-        update `laboratory_sheet` set
-        <if test="suggest!=null">suggest = #{suggest}</if>
-        <if test="status!=null"> ,status = #{status}</if>
+        update `laboratory_sheet`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="suggest!=null">suggest = #{suggest},</if>
+        <if test="status!=null">status = #{status}</if>
+        </trim>
         <where>
             id = #{id}
         </where>

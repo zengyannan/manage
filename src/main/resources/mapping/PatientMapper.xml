@@ -54,14 +54,16 @@
     </insert>
 
     <update id="update" parameterType="com.md.manage.domain.Patient">
-        update `patient` set
-        <if test="name!=null"> name=#{name}</if>
-        <if test="phone!=null"> ,phone=#{phone}</if>
-        <if test="address!=null"> ,address=#{address}</if>
-        <if test="idCard!=null"> ,id_card=#{idCard}</if>
-        <if test="status!=null"> ,status=#{status}</if>
-        <if test="createTime!=null"> ,create_time=#{createTime}</if>
-        <if test="updateTime!=null"> ,update_time=#{updateTime}</if>
+        update `patient`
+        <trim prefix="set" suffixOverrides=",">
+        <if test="name!=null"> name=#{name},</if>
+        <if test="phone!=null">phone=#{phone},</if>
+        <if test="address!=null">address=#{address},</if>
+        <if test="idCard!=null">id_card=#{idCard},</if>
+        <if test="status!=null">status=#{status},</if>
+        <if test="createTime!=null">create_time=#{createTime},</if>
+        <if test="updateTime!=null">update_time=#{updateTime}</if>
+        </trim>
         where id= #{id}
     </update>
 

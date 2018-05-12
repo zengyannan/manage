@@ -48,11 +48,13 @@
     (#{name},#{nameZh},#{status},#{createTime},#{updateTime})
   </insert>
   <update id="update" parameterType="com.md.manage.domain.Role">
-    update `role` set
-    <if test="name!=null"> name=#{name}</if>
-    <if test="nameZh!=null"> ,nameZh=#{nameZh}</if>
-    <if test="status!=null"> ,status=#{status}</if>
-    <if test="updateTime!=null"> ,update_time=#{updateTime}</if>
+    update `role`
+    <trim prefix="set" suffixOverrides=",">
+    <if test="name!=null"> name=#{name},</if>
+    <if test="nameZh!=null">nameZh=#{nameZh},</if>
+    <if test="status!=null">status=#{status},</if>
+    <if test="updateTime!=null">update_time=#{updateTime},</if>
+    </trim>
     where id= #{id}
   </update>
 

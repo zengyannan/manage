@@ -112,7 +112,8 @@
   </insert>
 
   <update id="update" parameterType="com.md.manage.domain.Hr">
-    update `hr` set
+    update `hr`
+    <trim prefix="set" suffixOverrides=",">
     <if test="name!=null">name = #{name},</if>
     <if test="phone!=null">phone = #{phone},</if>
     <if test="address!=null">address = #{address},</if>
@@ -121,6 +122,7 @@
     <if test="password!=null">password = #{password},</if>
     <if test="updateTime!=null">update_time = #{updateTime},</if>
     <if test="remark!=null">remark = #{remark}</if>
+    </trim>
     where id = #{id}
   </update>
 

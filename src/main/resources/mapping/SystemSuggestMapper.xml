@@ -22,10 +22,12 @@
 </insert>
 
 <update id="update" parameterType="com.md.manage.domain.SystemSuggest">
-    update `system_suggest` set
-    <if test="specificId!=null"> specific_id=#{specificId}</if>
-    <if test="tips!=null"> ,tips=#{tips}</if>
-    <if test="suggest!=null"> ,suggest=#{suggest}</if>
+    update `system_suggest`
+    <trim prefix="set" suffixOverrides=",">
+    <if test="specificId!=null"> specific_id=#{specificId},</if>
+    <if test="tips!=null">tips=#{tips},</if>
+    <if test="suggest!=null">suggest=#{suggest},</if>
+    </trim>
     where id= #{id}
 </update>
 
