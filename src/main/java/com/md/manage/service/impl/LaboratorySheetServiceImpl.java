@@ -1,9 +1,6 @@
 package com.md.manage.service.impl;
 
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.md.manage.domain.Hr;
 import com.md.manage.domain.LaboratorySheet;
 import com.md.manage.domain.SpecificItem;
 import com.md.manage.domain.SystemSuggest;
@@ -23,9 +20,7 @@ import com.md.manage.validate.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LaboratorySheetServiceImpl implements LaboratorySheetService {

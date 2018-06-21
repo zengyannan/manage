@@ -1,0 +1,2 @@
+webpackJsonp([20],{253:function(n,e,t){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=t(291),u=t.n(r);for(var a in r)["default","default"].indexOf(a)<0&&function(n){t.d(e,n,function(){return r[n]})}(a);var i=t(310),c=t(23),f=c(u.a,i.a,!1,null,null,null);e.default=f.exports},291:function(n,e){},310:function(n,e,t){"use strict";var r=function(){var n=this,e=n.$createElement;return(n._self._c||e)("div",[n._v("\n主页\n ")])},u=[],a={render:r,staticRenderFns:u};e.a=a}});
+//# sourceMappingURL=20.js.map?dc19769b9034535e9a28
